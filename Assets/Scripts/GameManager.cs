@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     public Canvas pauseCanvas, inGameCanvas, artifactCanvas, passwordCanvas, lockpickCanvas, fadeToBlackCanvas;
     [SerializeField] Image blackImage;
+    public PlayerController player;
     public GameObject movingLockpick;
     public Slider skillCheckSlider;
     public GameObject skillCheckGreenArea;
@@ -138,6 +139,7 @@ public class GameManager : MonoBehaviour
         sfxSource = gameObject.AddComponent<AudioSource>();
         sfxSource.outputAudioMixerGroup = sfxMixerGroup;
         defaultUpgradeRequirementsTextScale = characterSkillTreeRequirementsText.transform.localScale;
+        //Application.targetFrameRate = 60;
     }
 
     // Update is called once per frame
@@ -1195,6 +1197,7 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator FadeToBlack(float blackoutTime)
     {
+        player.PreventRandomEncounters();
         fadeToBlackCanvas.enabled = true;
         float transitionTime = 0.2f;
 
@@ -1219,6 +1222,7 @@ public class GameManager : MonoBehaviour
         blackImage.color = new Color(0, 0, 0, 0);
 
         fadeToBlackCanvas.enabled = false;
+        player.AllowRandomEncounters();
     }
 
     public void SaveGame()

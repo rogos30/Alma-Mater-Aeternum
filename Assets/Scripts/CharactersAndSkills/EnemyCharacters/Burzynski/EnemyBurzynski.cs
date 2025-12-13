@@ -23,8 +23,6 @@ public class EnemyBurzynski : EnemyCharacter
         skillSet.Add(attack);
         EnemyBalaclava balaclava = new EnemyBalaclava();
         skillSet.Add(balaclava);
-        EnemySwordMayhem swordMayhem = new EnemySwordMayhem();
-        skillSet.Add(swordMayhem);
         EnemySwordTwirl swordTwirl = new EnemySwordTwirl();
         skillSet.Add(swordTwirl);
         EnemyKorwinsPistol korwinsPistol = new EnemyKorwinsPistol();

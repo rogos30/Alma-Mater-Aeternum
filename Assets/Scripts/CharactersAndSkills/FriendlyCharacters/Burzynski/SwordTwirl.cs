@@ -17,6 +17,7 @@ public class SwordTwirl : PlayableSkill
         MultipleTargets = true;
         TargetIsRandom = false;
         MaxLevel = 3;
+        SkillSoundId = 44;
         levelsToUpgrades = new List<int> { 1, 1, 12 };
         tokensToUpgrades = new List<int> { 2, 1, 2 };
         upgradeNames = new List<string> { "Odblokuj umiejêtnoœæ " + Name, "Zmniejsz koszt umiejêtnoœci", "Wzmocnij krytyczne trafienia" };

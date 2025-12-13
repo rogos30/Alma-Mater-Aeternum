@@ -409,6 +409,8 @@ public class BattleManager : MonoBehaviour
             {
                 case 1: //backed out of subactions
                     PrintPageOfActions();
+                    qeInfo[0].SetActive(false);
+                    qeInfo[1].SetActive(false);
                     switch (currentRow)
                     {
                         case 0: //skill
@@ -1093,7 +1095,8 @@ public class BattleManager : MonoBehaviour
         returnPosition = player.transform.position;
         player.transform.position = battlePosition;
         player.SetActive(false);
-        StoryManager.instance.DisableAllNPCs();
+        //StoryManager.instance.DisableAllNPCs();
+        StoryManager.instance.DisablePatrolNPCs();
         RidUIofColor();
         for (int i = 0; i < characterNames.Length; i++) //clear everything up
         {
@@ -1164,7 +1167,8 @@ public class BattleManager : MonoBehaviour
         background.gameObject.SetActive(false);
         player.SetActive(true);
         player.transform.position = returnPosition;
-        StoryManager.instance.HandleAllNPCs();
+        //StoryManager.instance.HandleAllNPCs();
+        StoryManager.instance.HandlePatrolNPCs();
         battleCanvas.enabled = false;
         if (playerWon)
         {
@@ -1501,6 +1505,8 @@ public class BattleManager : MonoBehaviour
         }
         dynamicDescription.SetActive(false);
         //actionDescriptionMenu.SetActive(true);
+        qeInfo[0].SetActive(false);
+        qeInfo[1].SetActive(false);
         acceptsInput = true;
         currentColumn = 0;
         RidUIofColor();

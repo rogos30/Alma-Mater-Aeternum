@@ -26,7 +26,39 @@ public class PlayerFollowerController : Interactable
     // Update is called once per frame
     void Update()
     {
-        StartCoroutine(MoveDelayed(target));
+        //StartCoroutine(MoveDelayed(target))
+        if (Vector2.Distance(transform.position, target.position) >= distanceFromTarget)
+        {
+            timeWithNoMovement = 0f;
+            Vector2 difference = target.position - transform.position;
+            double angle = Math.Abs(Math.Atan(difference.x / difference.y) * 180 / Math.PI);
+            if (angle > 45)
+            {
+                MoveHorizontal(difference.x >= 0);
+            }
+            else
+            {
+                MoveVertical(difference.y >= 0);
+            }
+            if (Vector2.Distance(transform.position, target.position) > 5)
+            {
+                transform.position = target.position;
+            }
+            else
+            {
+                Vector3 newPos = Vector2.MoveTowards(transform.position, target.position, moveSpeed * Time.deltaTime);
+                newPos.z = newPos.y;
+                transform.position = newPos;
+            }
+        }
+        else
+        {
+            timeWithNoMovement += Time.deltaTime;
+            if (timeWithNoMovement >= 0.15f)
+            {
+                animator.SetInteger("isWalking", 0);
+            }
+        }
     }
 
     IEnumerator MoveDelayed(Transform target)
@@ -120,16 +152,6 @@ public class PlayerFollowerController : Interactable
         {
             other.GetComponentInParent<PatrolNPCController>().killZoneEngaged = true;
         }
-        /*else if (other.CompareTag("Marlboro"))
-        {
-            StoryManager.instance.CollectMarlboro();
-            other.gameObject.SetActive(false);
-        }
-        else if (other.CompareTag("PonySticker"))
-        {
-            StoryManager.instance.CollectPonySticker();
-            other.gameObject.SetActive(false);
-        }*/
     }
 
     private void OnTriggerExit2D(Collider2D other)

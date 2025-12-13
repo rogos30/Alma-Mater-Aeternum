@@ -50,6 +50,7 @@ public class Tracksuiter : EnemyCharacter
         skillSet.Add(baseballStrike);
         BottleThrow bottleThrow = new BottleThrow();
         skillSet.Add(bottleThrow);
+        skillSet.Add(bottleThrow);
         EnemyBalaclava enemyBalaclava = new EnemyBalaclava();
         skillSet.Add(enemyBalaclava);
         Chant chant = new Chant();

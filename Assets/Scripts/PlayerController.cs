@@ -5,17 +5,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Range(0, 10f)]public float moveSpeed = 4;
+    [Range(0, 10f)]public float moveSpeed = 3.5f;
     float timeToFight;
     Animator animator;
     [SerializeField] RuntimeAnimatorController[] controllers;
-    bool isFacingRight = false, isMoving = false;
+    bool isFacingRight = false, isMoving = false, isMovingDiagonally = false;
     public int currentRandomEncounterStage = 0;
     [SerializeField] bool allowRandomEncounters = false;
     [SerializeField] bool enableCheats = false;
     int[] randomEncounterBackgroundIndexes = { 5, 21, 5 };
 
     [SerializeField] GameObject interactionPrompt;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -30,7 +31,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         if (GameManager.instance.inGameCanvas.enabled && !DialogueManager.instance.dialogueCanvas.enabled && !DialogueManager.instance.gameInfoCanvas.enabled
-            && !GameManager.instance.artifactCanvas.enabled && !GameManager.instance.passwordCanvas.enabled)
+            && !GameManager.instance.artifactCanvas.enabled && !GameManager.instance.passwordCanvas.enabled && !GameManager.instance.fadeToBlackCanvas.enabled)
         {
             isMoving = false;
             HandleInput();
@@ -53,6 +54,12 @@ public class PlayerController : MonoBehaviour
     void HandleInput()
     {
         bool pressedMovementKey = false;
+        isMovingDiagonally = false;
+        if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+            && (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S)))
+        {
+            isMovingDiagonally = true;
+        }
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             pressedMovementKey = true;
@@ -140,13 +147,18 @@ public class PlayerController : MonoBehaviour
 
     void MoveHorizontal(bool right)
     {
+        float speed = moveSpeed;
+        if (isMovingDiagonally)
+        {
+            speed = moveSpeed / Mathf.Sqrt(2);
+        }
         if (right)
         {
             if (!isFacingRight)
             {
                 Flip();
             }
-            transform.Translate(moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+            transform.Translate(speed * Time.deltaTime, 0.0f, 0.0f, Space.World);
         }
         else
         {
@@ -154,7 +166,7 @@ public class PlayerController : MonoBehaviour
             {
                 Flip();
             }
-            transform.Translate(-moveSpeed * Time.deltaTime, 0.0f, 0.0f, Space.World);
+            transform.Translate(-speed * Time.deltaTime, 0.0f, 0.0f, Space.World);
         }
         animator.SetInteger("isWalking", 3);
 
@@ -166,14 +178,19 @@ public class PlayerController : MonoBehaviour
 
     void MoveVertical(bool up)
     {
+        float speed = moveSpeed;
+        if (isMovingDiagonally)
+        {
+            speed = moveSpeed / Mathf.Sqrt(2);
+        }
         if (up)
         {
-            transform.Translate(0.0f, moveSpeed * Time.deltaTime, 0.0f, Space.World);
+            transform.Translate(0.0f, speed * Time.deltaTime, 0.0f, Space.World);
             animator.SetInteger("isWalking", 1);
         }
         else
         {
-            transform.Translate(0.0f, -moveSpeed * Time.deltaTime, 0.0f, Space.World);
+            transform.Translate(0.0f, -speed * Time.deltaTime, 0.0f, Space.World);
             animator.SetInteger("isWalking", 2);
         }
         var pos = transform.position;

@@ -14,6 +14,7 @@ public class EnemySwordTwirl : EnemySkill
         TargetIsFriendly = false;
         TargetIsSelf = false;
         MultipleTargets = true;
+        SkillSoundId = 44;
     }
 
     public override string execute(EnemyCharacter source, Character target)

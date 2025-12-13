@@ -168,6 +168,86 @@ public class StoryManager : MonoBehaviour
         DisableFollowerNPCs();
     }
 
+    public void DisablePatrolNPCs()
+    {
+        foreach (var npc in PatrolNPCs)
+        {
+            npc.SetActive(false);
+        }
+    }
+
+    public void HandlePatrolNPCs()
+    {
+        foreach (var npc in PatrolNPCs)
+        {
+            if (currentMainQuest >= npc.GetComponent<Interactable>().appearanceAtQuest && currentMainQuest < npc.GetComponent<Interactable>().disappearanceAtQuest && npc.GetComponent<PatrolNPCController>().sideQuestId == -1)
+            {
+                npc.SetActive(true);
+            }
+            else
+            {
+                npc.SetActive(false);
+            }
+        }
+        foreach (var pnpc in PatrolNPCs)
+        {
+            var sqpnpc = pnpc.GetComponent<PatrolNPCController>();
+            switch (sqpnpc.sideQuestId)
+            {
+                case 0:
+                    if (currentPingPongScamsQuest >= sqpnpc.appearanceAtQuest && currentPingPongScamsQuest < sqpnpc.disappearanceAtQuest)
+                    {
+                        pnpc.SetActive(true);
+                    }
+                    else
+                    {
+                        pnpc.SetActive(false);
+                    }
+                    break;
+                case 1:
+                    if (currentFollowingRefereesQuest >= sqpnpc.appearanceAtQuest && currentFollowingRefereesQuest < sqpnpc.disappearanceAtQuest)
+                    {
+                        pnpc.SetActive(true);
+                    }
+                    else
+                    {
+                        pnpc.SetActive(false);
+                    }
+                    break;
+                case 2:
+                    if (currentDiversionAndSearchQuest >= sqpnpc.appearanceAtQuest && currentDiversionAndSearchQuest < sqpnpc.disappearanceAtQuest)
+                    {
+                        pnpc.SetActive(true);
+                    }
+                    else
+                    {
+                        pnpc.SetActive(false);
+                    }
+                    break;
+                case 3:
+                    if (currentStrongStuffQuest >= sqpnpc.appearanceAtQuest && currentStrongStuffQuest < sqpnpc.disappearanceAtQuest)
+                    {
+                        pnpc.SetActive(true);
+                    }
+                    else
+                    {
+                        pnpc.SetActive(false);
+                    }
+                    break;
+                case 4:
+                    if (currentFaceTheCheaterQuest >= sqpnpc.appearanceAtQuest && currentFaceTheCheaterQuest < sqpnpc.disappearanceAtQuest)
+                    {
+                        pnpc.SetActive(true);
+                    }
+                    else
+                    {
+                        pnpc.SetActive(false);
+                    }
+                    break;
+            }
+        }
+    }
+
     public void HandleStoryNPCs()
     {
         foreach (var npc in storyNPCs)
@@ -567,7 +647,7 @@ public class StoryManager : MonoBehaviour
                 if (isPlayingGameNormally)
                 {
                     List<string> gameInfoLines = new List<string>();
-                    gameInfoLines.Add("Misja poboczna dostêpna! Udaj siê na salê od ping ponga, aby j¹ wykonaæ");
+                    gameInfoLines.Add("Misja poboczna dostêpna! Udaj siê na salê od ping ponga (2. piêtro, blok A), aby j¹ wykonaæ");
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
@@ -734,7 +814,7 @@ public class StoryManager : MonoBehaviour
                 player.moveSpeed = 3.5f;
                 foreach (var follower in followerNPCs)
                 {
-                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 4;
+                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 3.5f;
                 }
                 break;
             case 83:
@@ -748,7 +828,7 @@ public class StoryManager : MonoBehaviour
                 player.moveSpeed = 3.5f;
                 foreach (var follower in followerNPCs)
                 {
-                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 4;
+                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 3.5f;
                 }
                 break;
             case 87:
@@ -762,7 +842,7 @@ public class StoryManager : MonoBehaviour
                 player.moveSpeed = 3.5f;
                 foreach (var follower in followerNPCs)
                 {
-                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 4;
+                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 3.5f;
                 }
                 break;
             case 90:
@@ -781,7 +861,7 @@ public class StoryManager : MonoBehaviour
                 player.moveSpeed = 3.5f;
                 foreach (var follower in followerNPCs)
                 {
-                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 4;
+                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 3.5f;
                 }
                 player.AllowRandomEncounters();
                 if (isPlayingGameNormally)
@@ -1054,6 +1134,7 @@ public class StoryManager : MonoBehaviour
                         player.transform.position = new Vector2(-300, 35);
                     }
                     HandleFollowerNPCs();
+                    followerNPCs[4].SetActive(false);
                     break;
                 case 4:
                     GameManager.instance.artifacts[2].GetComponent<ArtifactController>().wasSeen = true;
@@ -1126,22 +1207,18 @@ public class StoryManager : MonoBehaviour
                         AudioClip[] voiceLines = new AudioClip[2];
                         voiceLines[0] = additionalVoiceLines[6];
                         voiceLines[1] = additionalVoiceLines[7];
-                        //DialogueManager.instance.onDialogueEnd.RemoveAllListeners();
+                        DialogueManager.instance.onDialogueEnd.RemoveAllListeners();
                         DialogueManager.instance.onDialogueEnd.AddListener(() =>
                         {
                             DialogueManager.instance.onDialogueEnd.RemoveAllListeners();
-                            if (readDialogue)
-                            {
-                                List<string> gameInfoLines = new List<string>();
-                                gameInfoLines.Add("Zdobyto nowy artefakt. Artefakty mo¿esz przegl¹daæ w menu pauzy.");
-                                DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
-                            }
+                            List<string> gameInfoLines = new List<string>();
+                            gameInfoLines.Add("Zdobyto nowy artefakt. Artefakty mo¿esz przegl¹daæ w menu pauzy.");
+                            DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                         });
                         DialogueManager.instance.StartDialogue(lines, speakerIndexes, voiceLines);
                     }
                     GameManager.instance.artifacts[9].GetComponent<ArtifactController>().wasSeen = true;
                     
-
                     break;
             }
             HandleSideQuestNPCs(3);

@@ -35,10 +35,13 @@ public class Burzynski : FriendlyCharacter
     }
     protected override void AdditionalChangesOnReset()
     {
+        Skill = MaxSkill;
+        IsGuarding = false;
         NegativeEffectsImmunity = 9999;
     }
     protected override void AdditionalChangesOnDeath()
     {
+        IsGuarding = false;
         NegativeEffectsImmunity = 9999;
     }
 }

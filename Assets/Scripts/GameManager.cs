@@ -718,10 +718,11 @@ public class GameManager : MonoBehaviour
                                 maxCurrentRow = BattleManager.instance.playableCharacters[chosenChar].UpgradeLevel + 1;
                                 characterSkillTreeColumn.SetActive(true);
                                 PrintUpgrades();
-                                characterSkillTreeDescriptionText.text = BattleManager.instance.playableCharacters[chosenChar].upgradeDescription;
+                                PrintUpgradeDescription();
+                                /*characterSkillTreeDescriptionText.text = BattleManager.instance.playableCharacters[chosenChar].upgradeDescription;
                                 characterSkillTreeRequirementsText.text =
                                     "Wymagane:\nPoziom: " + BattleManager.instance.playableCharacters[chosenChar].Level + " / " + BattleManager.instance.playableCharacters[chosenChar].levelsToUpgrades[0]
-                                    + "\n Tokeny: " + BattleManager.instance.playableCharacters[chosenChar].UpgradeTokens + " / " + BattleManager.instance.playableCharacters[chosenChar].tokensToUpgrades[0];
+                                    + "\n Tokeny: " + BattleManager.instance.playableCharacters[chosenChar].UpgradeTokens + " / " + BattleManager.instance.playableCharacters[chosenChar].tokensToUpgrades[0];*/
                                 skillTreeIcons[0].sprite = upgradeSprites[upgradeSprites.Length - 1];
                                 for (int i = 1; i < skillTreeIcons.Length; i++)
                                 {

@@ -19,7 +19,7 @@ public class ControllerThrow : PlayableSkill
         SkillSoundId = 21;
         MaxLevel = 3;
         levelsToUpgrades = new List<int> {1, 5, 7 };
-        tokensToUpgrades = new List<int> {0, 1, 2 };
+        tokensToUpgrades = new List<int> {1, 1, 2 };
         upgradeNames = new List<string> { "Odblokuj umiejêtnoœæ " + Name, "Zmniejsz koszt umiejêtnoœci", "Zwiêksz obra¿enia umiejêtnoœci" };
         upgradeDescriptions = new List<string> { "Zadaje spore obra¿enia 2 razy", "100 -> 80 SP", "+25% obra¿eñ" };
     }

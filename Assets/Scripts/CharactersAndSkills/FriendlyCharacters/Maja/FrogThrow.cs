@@ -32,7 +32,7 @@ public class FrogThrow : PlayableSkill
             return source.NominativeName + " nie trafia ¿ab¹ w " + target.AccusativeName;
         }
         string finalDesc = source.NominativeName + InFightDescription + target.AccusativeName;
-        int damage = (int)(source.Attack * attackMultiplier) - target.Defense;
+        int damage = (int)(source.Attack * attackMultiplier * Random.Range(0.8f, 1.2f)) - target.Defense;
         if (skillPerformance == 2)
         {
             int turns = defaultTurns;

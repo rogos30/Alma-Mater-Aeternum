@@ -12,7 +12,7 @@ public class Overrun : PlayableSkill
         SkillDescription = "wzywa swojego konia i rozje¿d¿a nim wszystkich wrogów";
         InFightDescription = " traktuje wrogów jako tor jeŸdziecki i zadaje ";
         Cost = 0.5f;
-        AccuracyMultiplier = 1.2f;
+        AccuracyMultiplier = 0.8f;
         TargetIsFriendly = false;
         TargetIsSelf = false;
         MultipleTargets = true;
@@ -51,7 +51,7 @@ public class Overrun : PlayableSkill
         }
         if (Level == 1)
         {
-            attackMultiplier = 1.25f;
+            attackMultiplier = 1f;
         }
         if (Level == 2)
         {

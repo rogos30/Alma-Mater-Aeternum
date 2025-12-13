@@ -18,7 +18,7 @@ public class LaughingStock : PlayableSkill
         AnimationId = 4;
         SkillSoundId = 19;
         MaxLevel = 2;
-        levelsToUpgrades = new List<int> { 4, 5 };
+        levelsToUpgrades = new List<int> { 1, 5 };
         tokensToUpgrades = new List<int> { 1, 1 };
         upgradeNames = new List<string> { "Odblokuj umiejêtnoœæ " + Name, "Wyd³u¿ czas dzia³ania efektu umiejêtnoœci" };
         upgradeDescriptions = new List<string> { "Zmniejsza obronê przeciwników", "1 -> 2 tury"  };

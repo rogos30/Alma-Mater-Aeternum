@@ -22,7 +22,7 @@ public class BaseballStrike : EnemySkill
         }
         string finalDesc = source.NominativeName + InFightDescription + target.DativeName;
         int damage = (int)(source.Attack * 2 * Random.Range(0.8f, 1.2f)) - target.Defense;
-        int turns = 2;
+        int turns = 1;
         if (Random.Range(0, 1f) < criticalChance)
         {
             finalDesc = "KRYTYCZNE TRAFIENIE! " + finalDesc + " parali¿uj¹c na 1 turê i ";

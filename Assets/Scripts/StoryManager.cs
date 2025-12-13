@@ -563,6 +563,14 @@ public class StoryManager : MonoBehaviour
                 GameManager.instance.currentFreeroamMusicStage = 2;
                 if (isPlayingGameNormally) GameManager.instance.PlayFreeroamMusic();
                 break;
+            case 14:
+                if (isPlayingGameNormally)
+                {
+                    List<string> gameInfoLines = new List<string>();
+                    gameInfoLines.Add("Misja poboczna dostêpna! Udaj siê na salê od ping ponga, aby j¹ wykonaæ");
+                    DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
+                }
+                break;
             case 19:
                 //dodanie Stasiaka;
                 BattleManager.instance.currentPartyCharacters.Add(2);
@@ -582,8 +590,7 @@ public class StoryManager : MonoBehaviour
                 if (isPlayingGameNormally)
                 {
                     List<string> gameInfoLines = new List<string>();
-                    //gameInfoLines.Add("Misja poboczna dostêpna! U¿yj Q oraz E, aby przegl¹daæ dostêpne misje.");
-                    gameInfoLines.Add("Misja poboczna dostêpna!");
+                    gameInfoLines.Add("Misja poboczna dostêpna! Udaj siê na 3. piêtro w bloku D, aby j¹ wykonaæ");
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
@@ -623,12 +630,20 @@ public class StoryManager : MonoBehaviour
                 //Maja wraca do druzyny
                 BattleManager.instance.currentPartyCharacters.Add(3);
                 break;
+            case 40:
+                if (isPlayingGameNormally && IsSideQuestCompleted(0))
+                {
+                    List<string> gameInfoLines = new List<string>();
+                    gameInfoLines.Add("Misja poboczna dostêpna! Udaj siê miêdzy kanapy na 2. piêtrze w bloku B, aby j¹ wykonaæ");
+                    DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
+                }
+                break;
             case 43:
                 //first lockpick
                 if (isPlayingGameNormally)
                 {
                     List<string> gameInfoLines = new List<string>();
-                    gameInfoLines.Add("Aby otworzyæ zamkniête drzwi, przekrêcaj wytrych. Gdy zacznie dr¿eæ, oznacza to, ¿e jesteœ blisko dobrego ustawienia. Im bli¿ej dobrego ustawienia, tym szersze pole na pasku szybkiego trafienia.");
+                    gameInfoLines.Add("Aby otworzyæ zamkniête drzwi, przekrêcaj wytrych. Dr¿enie wytrychu oznacza, ¿e jesteœ blisko dobrego ustawienia. Im bli¿ej dobrego ustawienia, tym szersze pole na pasku szybkiego trafienia.");
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
@@ -647,6 +662,12 @@ public class StoryManager : MonoBehaviour
             case 51:
                 GameManager.instance.currentFreeroamMusicStage = 3;
                 if (isPlayingGameNormally) GameManager.instance.PlayFreeroamMusic();
+                if (isPlayingGameNormally && IsSideQuestCompleted(1))
+                {
+                    List<string> gameInfoLines = new List<string>();
+                    gameInfoLines.Add("Misja poboczna dostêpna! Udaj siê na 1. piêtro do bloku D, aby j¹ wykonaæ");
+                    DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
+                }
                 break;
             case 52:
                 GameManager.instance.currentFreeroamMusicStage = 4;
@@ -919,6 +940,12 @@ public class StoryManager : MonoBehaviour
             {
                 StartCoroutine(GameManager.instance.FadeToBlack(0.7f));
                 StartCoroutine(FinishFollowingReferees());
+                if (currentMainQuest >= 51 && currentMainQuest < 57)
+                {
+                    List<string> gameInfoLines = new List<string>();
+                    gameInfoLines.Add("Misja poboczna dostêpna! Udaj siê na 1. piêtro do bloku D, aby j¹ wykonaæ");
+                    DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
+                }
             }
             else
             {
@@ -1099,16 +1126,21 @@ public class StoryManager : MonoBehaviour
                         AudioClip[] voiceLines = new AudioClip[2];
                         voiceLines[0] = additionalVoiceLines[6];
                         voiceLines[1] = additionalVoiceLines[7];
-                        DialogueManager.instance.onDialogueEnd.RemoveAllListeners();
+                        //DialogueManager.instance.onDialogueEnd.RemoveAllListeners();
+                        DialogueManager.instance.onDialogueEnd.AddListener(() =>
+                        {
+                            DialogueManager.instance.onDialogueEnd.RemoveAllListeners();
+                            if (readDialogue)
+                            {
+                                List<string> gameInfoLines = new List<string>();
+                                gameInfoLines.Add("Zdobyto nowy artefakt. Artefakty mo¿esz przegl¹daæ w menu pauzy.");
+                                DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
+                            }
+                        });
                         DialogueManager.instance.StartDialogue(lines, speakerIndexes, voiceLines);
                     }
                     GameManager.instance.artifacts[9].GetComponent<ArtifactController>().wasSeen = true;
-                    if (readDialogue)
-                    {
-                        List<string> gameInfoLines = new List<string>();
-                        gameInfoLines.Add("Zdobyto nowy artefakt. Artefakty mo¿esz przegl¹daæ w menu pauzy.");
-                        DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
-                    }
+                    
 
                     break;
             }

@@ -19,7 +19,7 @@ public class Kacper : PlayableSkill
         SkillSoundId = 9;
         MaxLevel = 2;
         levelsToUpgrades = new List<int> { 5, 7 };
-        tokensToUpgrades = new List<int> { 2, 1 };
+        tokensToUpgrades = new List<int> { 2, 2 };
         upgradeNames = new List<string> { "Odblokuj umiejêtnoœæ " + Name, "Zwiêksz iloœæ rozdañ SP" };
         upgradeDescriptions = new List<string> { "Losowo rozdaje sojusznikom SP", "8 -> 10 rozdañ" };
     }

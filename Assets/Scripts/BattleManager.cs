@@ -1506,6 +1506,7 @@ public class BattleManager : MonoBehaviour
         RidUIofColor();
         actions[currentRow = 0].color = orange;
         actionDescriptionText.text = "Użyj umiejętności";
+        characterDescriptionText.text = playableCharacterList[currentPlayable].AbilityDescription;
         PrintPageOfActions();
         HandlePhases();
     }

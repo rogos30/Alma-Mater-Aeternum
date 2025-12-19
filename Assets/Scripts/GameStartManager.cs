@@ -23,9 +23,10 @@ public class GameStartManager : MonoBehaviour
     public AudioMixerGroup musicMixerGroup, sfxMixerGroup;
 
     readonly string[] difficultyNames = {"£atwy", "Œredni", "Trudny", "Fatalny" };
-    readonly string[] showFpsNames = { "Nigdy", "Zawsze" };
+    readonly string[] lockFpsNames = { "Tak", "Nie" };
     int currentRow, minCurrentRow, maxCurrentRow, currentState, chosenSaveSlot;
-    int sfxVolume = 25, musicVolume = 25, showFPS = 0;
+    int sfxVolume = 25, musicVolume = 25;
+    bool lockFPS = false;
     [NonSerialized] public int difficulty = 0;
     [SerializeField] TMP_Text guideText;
     [SerializeField] TMP_Text[] mainTexts;
@@ -80,11 +81,13 @@ public class GameStartManager : MonoBehaviour
             sfxSource.clip = navigationCancelSound;
             sfxSource.loop = false;
             sfxSource.Play();
+            int newRow = 0;
             switch (currentState)
             {
                 case 0: //main view
                     currentState = 6;
                     PrintYesNo();
+                    newRow = 1;
                     break;
                 case 1: //new game slots
                     currentState = 0;
@@ -116,7 +119,7 @@ public class GameStartManager : MonoBehaviour
                     break;
             }
             mainTexts[currentRow].color = Color.white;
-            mainTexts[currentRow = 0].color = orange;
+            mainTexts[currentRow = newRow].color = orange;
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) ||
             Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
@@ -162,7 +165,7 @@ public class GameStartManager : MonoBehaviour
                         difficulty = Mathf.Max(difficulty - 1, 0);
                         break;
                     case 3:
-                        showFPS = Mathf.Max(showFPS - 1, 0);
+                        lockFPS = false;
                         break;
                 }
                 UpdateSettings();
@@ -187,7 +190,7 @@ public class GameStartManager : MonoBehaviour
                         difficulty = Mathf.Min(difficulty + 1, difficultyNames.Length - 1);
                         break;
                     case 3:
-                        showFPS = Mathf.Min(showFPS + 1, showFpsNames.Length - 1);
+                        lockFPS = true;
                         break;
                 }
                 UpdateSettings();
@@ -331,7 +334,7 @@ public class GameStartManager : MonoBehaviour
         mainTexts[0].text = "G³oœnoœæ dŸwiêków";
         mainTexts[1].text = "G³oœnoœæ muzyki";
         mainTexts[2].text = "Poziom trudnoœci";
-        mainTexts[3].text = "Poka¿ FPS";
+        mainTexts[3].text = "Ogranicz FPS";
         UpdateSettings();
         maxCurrentRow = 4;
     }
@@ -405,7 +408,7 @@ public class GameStartManager : MonoBehaviour
                         guideText.text = "Wybierz poziom trudnoœci gry";
                         break;
                     case 3:
-                        guideText.text = "Kiedy wyœwietlaæ iloœæ klatek na sekundê?";
+                        guideText.text = "Zablokowaæ liczbê klatek na sekundê do czêstotliwoœci odœwie¿ania wyœwietlacza?";
                         break;
                 }
                 break;
@@ -454,7 +457,7 @@ public class GameStartManager : MonoBehaviour
             mixer.SetFloat("sfxVolume", Mathf.Log10((float)sfxVolume / 100) * 20);
         }
         difficulty = PlayerPrefs.GetInt("difficulty");
-        showFPS = PlayerPrefs.GetInt("showFPS");
+        lockFPS = Boolean.Parse(PlayerPrefs.GetString("lockFPS"));
     }
     void SaveSettings()
     {
@@ -477,7 +480,8 @@ public class GameStartManager : MonoBehaviour
             mixer.SetFloat("musicVolume", Mathf.Log10((float)musicVolume / 100) * 20);
         }
         PlayerPrefs.SetInt("difficulty", difficulty);
-        PlayerPrefs.SetInt("showFPS", showFPS);
+        PlayerPrefs.SetString("lockFPS", lockFPS.ToString());
+        QualitySettings.vSyncCount = lockFPS ? 0 : 1;
         PlayerPrefs.Save();
     }
     void UpdateSettings()
@@ -485,7 +489,7 @@ public class GameStartManager : MonoBehaviour
         optionValuesTexts[0].text = sfxVolume.ToString();
         optionValuesTexts[1].text = musicVolume.ToString();
         optionValuesTexts[2].text = difficultyNames[difficulty];
-        optionValuesTexts[3].text = showFpsNames[showFPS];
+        optionValuesTexts[3].text = lockFpsNames[lockFPS ? 1 : 0];
     }
 
     void GetInfoFromFile()

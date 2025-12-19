@@ -13,7 +13,7 @@ public class ShopkeeperController : Interactable
     {
         if (GameManager.instance.inGameCanvas.enabled)
         {
-            if (StoryManager.instance.superToastProgress == 3)
+            if (StoryManager.instance.superToastProgress == 3 && superToastLines.Length > 0)
             {
                 DialogueManager.instance.onDialogueEnd.RemoveAllListeners();
                 DialogueManager.instance.onDialogueEnd.AddListener(AfterDialogue);

@@ -10,8 +10,8 @@ public class Skeleton : EnemyCharacter
         DativeName = "Szkieletowi - ¿o³nierzowi";
         AccusativeName = "Szkieleta - ¿o³nierza";
 
-        Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 10000;
-        DifficultyHealthChange = 5000;
+        Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 8000;
+        DifficultyHealthChange = 4000;
         Attack = DefaultAttack = BaseAttack = 550;
         DifficultyAttackChange = 250;
         Defense = DefaultDefense = BaseDefense = 90;

@@ -164,7 +164,7 @@ public class BattleManager : MonoBehaviour
                 HandleEnemysMove();
                 enemyIsMoving = false;
             }
-            GameManager.instance.CountFPS();
+            //GameManager.instance.CountFPS();
             HandleIndependentInput();
         }
     }
@@ -1095,8 +1095,7 @@ public class BattleManager : MonoBehaviour
         returnPosition = player.transform.position;
         player.transform.position = battlePosition;
         player.SetActive(false);
-        //StoryManager.instance.DisableAllNPCs();
-        StoryManager.instance.DisablePatrolNPCs();
+        StoryManager.instance.DisableAllNPCs(false);
         RidUIofColor();
         for (int i = 0; i < characterNames.Length; i++) //clear everything up
         {
@@ -1167,8 +1166,7 @@ public class BattleManager : MonoBehaviour
         background.gameObject.SetActive(false);
         player.SetActive(true);
         player.transform.position = returnPosition;
-        //StoryManager.instance.HandleAllNPCs();
-        StoryManager.instance.HandlePatrolNPCs();
+        StoryManager.instance.HandleAllNPCs(false);
         battleCanvas.enabled = false;
         if (playerWon)
         {

@@ -10,7 +10,7 @@ public class Aniela : EnemyCharacter
         DativeName = "Anieli";
         AccusativeName = "Anielê";
         Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 500;
-        DifficultyHealthChange = 500;
+        DifficultyHealthChange = 300;
         Attack = DefaultAttack = BaseAttack = 120;
         DifficultyAttackChange = 60;
         Defense = DefaultDefense = BaseDefense = 45;

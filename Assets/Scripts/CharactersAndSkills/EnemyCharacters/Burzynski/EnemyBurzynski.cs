@@ -9,8 +9,8 @@ public class EnemyBurzynski : EnemyCharacter
         NominativeName = "Burzyñski";
         DativeName = "Burzyñskiemu";
         AccusativeName = "Burzyñskiego";
-        Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 40000;
-        DifficultyHealthChange = 40000;
+        Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 30000;
+        DifficultyHealthChange = 20000;
         Attack = DefaultAttack = BaseAttack = 350;
         DifficultyAttackChange = 150;
         Defense = DefaultDefense = BaseDefense = 100;

@@ -51,12 +51,13 @@ public class GameManager : MonoBehaviour
     public AudioMixerGroup musicMixerGroup, sfxMixerGroup;
 
     readonly string[] difficultyNames = {"£atwy", "Œredni", "Trudny", "Fatalny" };
-    readonly string[] showFpsNames = { "Nigdy", "Zawsze" };
+    readonly string[] lockFpsNames = { "Tak", "Nie" };
     [NonSerialized] public bool canPause = true;
     [NonSerialized] public bool canSaveGame = true;
     int currentRow, maxCurrentRow, currentColumn, currentPage;
     int chosenMain, chosenInv, chosenChar, chosenCharOption, chosenEqCategory, chosenPage;
-    int sfxVolume = 25, musicVolume = 25, showFPS = 0;
+    int sfxVolume = 25, musicVolume = 25;
+    bool lockFPS = false;
     [NonSerialized] public int difficulty = 0;
     [NonSerialized] public int currentFreeroamMusicStage = 0;
     int[,] freeroamMusicIds = { { 0, 0, 0 }, { 1, 1, 1 }, { 0, 1, 1 }, { 2, 2, 2 }, { 0, 1, 2 }, { 3, 3, 3 }, { 4, 4, 4 }, { 5, 5, 5 }, { 1, 2, 2 } };
@@ -190,7 +191,8 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            if (showFPS == 1)
+            //if (showFPS == 1)
+            if (true)
             { //always
                 gameFpsText.text = (float)frames / maxFramesTime + " fps";
                 BattleManager.instance.battleFpsText.text = (float)frames / maxFramesTime + " fps";
@@ -525,7 +527,7 @@ public class GameManager : MonoBehaviour
                             difficulty = Mathf.Max(difficulty - 1, 0);
                             break;
                         case 3:
-                            showFPS = Mathf.Max(showFPS - 1, 0);
+                            lockFPS = false;
                             break;
                     }
                     UpdateSettings();
@@ -552,7 +554,7 @@ public class GameManager : MonoBehaviour
                             difficulty = Mathf.Min(difficulty + 1, difficultyNames.Length - 1);
                             break;
                         case 3:
-                            showFPS = Mathf.Min(showFPS + 1, showFpsNames.Length - 1);
+                            lockFPS = true;
                             break;
                     }
                     UpdateSettings();
@@ -1087,7 +1089,7 @@ public class GameManager : MonoBehaviour
             mixer.SetFloat("sfxVolume", Mathf.Log10((float)sfxVolume / 100) * 20);
         }
         difficulty = PlayerPrefs.GetInt("difficulty");
-        showFPS = PlayerPrefs.GetInt("showFPS");
+        lockFPS = Boolean.Parse(PlayerPrefs.GetString("lockFPS"));
         UpdateSettings();
     }
     void SaveSettings()
@@ -1119,7 +1121,9 @@ public class GameManager : MonoBehaviour
         {
             patrolNpc.GetComponent<PatrolNPCController>().UpdateDifficulty(difficulty);
         }
-        PlayerPrefs.SetInt("showFPS", showFPS);
+        PlayerPrefs.SetString("lockFPS", lockFPS.ToString());
+        Debug.Log(lockFPS.ToString());
+        QualitySettings.vSyncCount = lockFPS ? 0 : 1;
         PlayerPrefs.Save();
     }
     void UpdateSettings()
@@ -1127,7 +1131,7 @@ public class GameManager : MonoBehaviour
         optionValuesTexts[0].text = sfxVolume.ToString();
         optionValuesTexts[1].text = musicVolume.ToString();
         optionValuesTexts[2].text = difficultyNames[difficulty];
-        optionValuesTexts[3].text = showFpsNames[showFPS];
+        optionValuesTexts[3].text = lockFpsNames[lockFPS ? 1 : 0];
     }
 
     void PrintCurrentPageOfItems()

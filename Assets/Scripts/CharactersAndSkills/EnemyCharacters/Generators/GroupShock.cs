@@ -11,7 +11,7 @@ public class GroupShock : EnemySkill
         TargetIsFriendly = false;
         TargetIsSelf = false;
         MultipleTargets = true;
-        AccuracyMultiplier = 0.5f;
+        AccuracyMultiplier = 0.4f;
         SkillSoundId = 33;
     }
 

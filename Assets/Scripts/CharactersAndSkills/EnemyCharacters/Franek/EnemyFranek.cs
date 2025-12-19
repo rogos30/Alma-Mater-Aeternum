@@ -9,8 +9,8 @@ public class EnemyFranek : EnemyCharacter
         NominativeName = "Franek";
         DativeName = "Frankowi";
         AccusativeName = "Franka";
-        Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 50000;
-        DifficultyHealthChange = 50000;
+        Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 40000;
+        DifficultyHealthChange = 25000;
         Attack = DefaultAttack = BaseAttack = 400;
         DifficultyAttackChange = 150;
         Defense = DefaultDefense = BaseDefense = 100;

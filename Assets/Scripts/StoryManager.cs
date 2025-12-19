@@ -13,6 +13,7 @@ public class StoryManager : MonoBehaviour
     [SerializeField] Camera cam;
     [SerializeField] PlayerController player;
     [SerializeField] TMP_Text currentQuestText;
+    [SerializeField] GameObject[] shopkeepers;
     [SerializeField] GameObject[] storyNPCs;
     [SerializeField] GameObject[] storyTeleports;
     [SerializeField] GameObject[] sideQuestNPCs;
@@ -61,7 +62,7 @@ public class StoryManager : MonoBehaviour
         sideQuestLengths[4] = faceTheCheaterQuestDescriptions.Length;
         instance = this;
         currentQuestText.text = questDescriptions[currentMainQuest];
-        HandleAllNPCs(); //initializing all npcs
+        HandleAllNPCs(true); //initializing all npcs
         marlborosCollected = 0;
         ponyStickersCollected = 0;
         superToastProgress = 0;
@@ -134,13 +135,29 @@ public class StoryManager : MonoBehaviour
             sticker.SetActive(false);
         }
     }
-    public void HandleAllNPCs()
+    public void HandleAllNPCs(bool alsoStoryNPCs)
     {
-        HandleStoryNPCs();
+        if (alsoStoryNPCs) HandleStoryNPCs();
+        HandleShopkeepers();
         HandleStoryTeleports();
         HandleFollowerNPCs();
         HandleSideQuestNPCs();
         HandleSuperToastIngredients();
+    }
+
+    public void HandleShopkeepers()
+    {
+        foreach (var npc in shopkeepers)
+        {
+            if (currentMainQuest >= npc.GetComponent<Interactable>().appearanceAtQuest && currentMainQuest < npc.GetComponent<Interactable>().disappearanceAtQuest)
+            {
+                npc.SetActive(true);
+            }
+            else
+            {
+                npc.SetActive(false);
+            }
+        }
     }
 
     public void HandleSuperToastIngredients()
@@ -157,12 +174,12 @@ public class StoryManager : MonoBehaviour
         }
         SuperToastIngredients[2].SetActive(superToastProgress == 2 && currentMainQuest >= 109);
         if (finishedSuperToast) superToastProgress = 4;
-        Debug.Log(superToastProgress);
+        Debug.Log("super toast progress: " + superToastProgress);
     }
 
-    public void DisableAllNPCs()
+    public void DisableAllNPCs(bool alsoStoryNPCs)
     {
-        DisableStoryNPCs();
+        if (alsoStoryNPCs) DisableStoryNPCs();
         DisableStoryTeleports();
         DisableSideQuestNPCs();
         DisableFollowerNPCs();
@@ -802,6 +819,7 @@ public class StoryManager : MonoBehaviour
                 GameManager.instance.currentFreeroamMusicStage = 6;
                 if (isPlayingGameNormally) GameManager.instance.PlayFreeroamMusic();
                 GameManager.instance.currentLocationText.text = "Za szko³¹";
+                player.PreventRandomEncounters();
                 break;
             case 81:
                 player.moveSpeed = 8;
@@ -951,7 +969,7 @@ public class StoryManager : MonoBehaviour
                 }
             }
         }
-        HandleAllNPCs();
+        HandleAllNPCs(true);
     }
 
     void FinishSideQuest()
@@ -960,10 +978,10 @@ public class StoryManager : MonoBehaviour
         //showStoryNPCs jest true gdy gra nie jest wczytywana aka jest grana normalnie
         if (canReturnToMainStory) //gdy gra nie jest wczytywana LUB nie jestesmy w side quescie
         {
-            HandleAllNPCs();
+            HandleAllNPCs(true);
             currentQuestText.text = questDescriptions[currentMainQuest];
         }
-        else //gry gra jest wczytywana i jestesmy w side questach
+        else //gdy gra jest wczytywana i jestesmy w side questach
         {
             HandleSideQuestNPCs();
         }

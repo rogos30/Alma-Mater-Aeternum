@@ -21,6 +21,7 @@ public class Generator1 : EnemyCharacter
         XPDropped = 3000;
         EnemyAttack enemyAttack = new EnemyAttack();
         skillSet.Add(enemyAttack);
+        skillSet.Add(enemyAttack);
         DoublePunch doublePunch = new DoublePunch();
         skillSet.Add(doublePunch);
         skillSet.Add(doublePunch);

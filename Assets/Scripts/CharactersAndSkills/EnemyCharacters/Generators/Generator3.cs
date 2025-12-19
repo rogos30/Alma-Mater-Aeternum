@@ -22,6 +22,7 @@ public class Generator3 : EnemyCharacter
         DoublePunch doublePunch = new DoublePunch();
         skillSet.Add(doublePunch);
         skillSet.Add(doublePunch);
+        skillSet.Add(doublePunch);
         PowerGeneration powerGeneration = new PowerGeneration();
         skillSet.Add(powerGeneration);
         GroupShock groupShock = new GroupShock();

@@ -66,7 +66,7 @@ public class Welenc : FriendlyCharacter
 
     void SetAbilityDescription()
     {
-        AbilityDescription = "Zwyk³y atak Welenca jest wzmacniany za ka¿d¹ u¿yt¹ inn¹ umiejêtnoœæ i gardê. Obecnie: x" + AttackMultiplier;
+        AbilityDescription = "Mno¿nik obra¿eñ zwyk³ego ataku Welenca zwiêksza siê przez u¿ywanie innych umiejêtnoœci (+1.25x) lub gardy (+0.75x), max 4. Obecnie: x" + AttackMultiplier;
     }
 
     protected override void AdditionalChangesOnReset()

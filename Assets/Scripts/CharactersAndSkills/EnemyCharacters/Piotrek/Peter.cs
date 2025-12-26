@@ -10,7 +10,7 @@ public class Peter : EnemyCharacter
         DativeName = "Piotrkowi";
         AccusativeName = "Piotrka";
         Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 3000;
-        DifficultyHealthChange = 3000;
+        DifficultyHealthChange = 2000;
         Attack = DefaultAttack = BaseAttack = 200;
         DifficultyAttackChange = 70;
         Defense = DefaultDefense = BaseDefense = 75;

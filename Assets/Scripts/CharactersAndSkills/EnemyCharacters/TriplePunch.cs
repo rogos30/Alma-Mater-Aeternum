@@ -7,7 +7,7 @@ public class TriplePunch : EnemySkill
     public TriplePunch()
     {
         Name = "Potrójny atak";
-        InFightDescription = " wyprowadza 3 zwyk³e ciosy ";
+        InFightDescription = " wyprowadza 3 zwyk³e ciosy, zadaj¹c ";
         Repetitions = 3;
         TargetIsFriendly = false;
         TargetIsSelf = false;

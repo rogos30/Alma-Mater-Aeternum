@@ -164,7 +164,7 @@ public class BattleManager : MonoBehaviour
                 HandleEnemysMove();
                 enemyIsMoving = false;
             }
-            //GameManager.instance.CountFPS();
+            GameManager.instance.CountFPS();
             HandleIndependentInput();
         }
     }
@@ -1987,7 +1987,7 @@ public class BattleManager : MonoBehaviour
                 }
                 break;
             case "Franek":
-                if ((float)enemyCharacterList[0].Health / enemyCharacterList[0].MaxHealth <= 0.95f && currentPhase == 0)
+                if ((float)enemyCharacterList[0].Health / enemyCharacterList[0].MaxHealth <= 0.35f && currentPhase == 0)
                 {
                     currentPhase++;
                     enemyCharacterList[0].Health = (int)(UnityEngine.Random.Range(0.8f, 0.9f) * enemyCharacterList[0].MaxHealth);

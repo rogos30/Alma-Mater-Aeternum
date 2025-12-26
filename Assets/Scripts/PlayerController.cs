@@ -273,12 +273,13 @@ public class PlayerController : MonoBehaviour
 
     void ResetTimeToRandomEcounter()
     {
-        timeToFight = Random.Range(55, 70);
+        timeToFight = Random.Range(50, 60);
         //timeToFight = Random.Range(5, 10);
     }
 
     void InitiateRandomEncounter()
     {
+        if (GameManager.instance.currentLocationIndex == -1) return;
         int[] playables = new int[BattleManager.instance.currentPartyCharacters.Count];
         int[,] enemyConfigurations = { { 0, 0, 0, 1 }, { 0, 0, 1, 0 }, { 0, 0, 1, 1 }, { 0, 1, 0, 0 }, { 0, 1, 0, 1 }, { 0, 1, 1, 0 }, { 0, 1, 1, 1 },
                                         { 1, 0, 0, 0 }, { 1, 0, 0, 1 }, { 1, 0, 1, 0 }, { 1, 0, 1, 1 }, { 1, 1, 0, 0 }, { 1, 1, 0, 1 }, { 1, 1, 1, 0 }, { 1, 1, 1, 1 } };
@@ -306,7 +307,6 @@ public class PlayerController : MonoBehaviour
                 enemies[j++] = BattleManager.instance.randomEncounterEnemyIndexes[currentRandomEncounterStage, i];
             }
         }
-        if (GameManager.instance.currentLocationIndex == -1) return;
-        BattleManager.instance.InitiateBattle(playables, enemies, GameManager.instance.currentLocationIndex, true, true);
+        BattleManager.instance.InitiateBattle(playables, enemies, GameManager.instance.currentLocationIndex, GameManager.instance.canSaveGame, true);
     }
 }

@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{EDE025A8-3CAA-DA2D-6AFD-E9057FD72D0A}</ProjectGuid>
+    <ProjectGuid>{137BD798-887C-1A12-8A44-425D07C51E90}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>CFXRDemo</AssemblyName>
@@ -723,7 +723,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="CFXRRuntime.csproj">
-      <Project>{0D13CCC0-3E01-2986-5BA4-7E86219DB293}</Project>
+      <Project>{106161C4-76B7-DA8E-7B26-B2B5256CC6E2}</Project>
       <Name>CFXRRuntime</Name>
     </ProjectReference>
   </ItemGroup>

@@ -10,14 +10,14 @@ public class MainBuiler : EnemyCharacter
         DativeName = "Brygadziœcie";
         AccusativeName = "Brygadzisty";
         Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 6000;
-        DifficultyHealthChange = 2500;
+        DifficultyHealthChange = 3000;
         Attack = DefaultAttack = BaseAttack = 300;
         DifficultyAttackChange = 150;
         Defense = DefaultDefense = BaseDefense = 90;
         Accuracy = DefaultAccuracy = BaseAccuracy = 1f;
         Turns = DefaultTurns = BaseTurns = 1;
         Speed = 450;
-        MoneyDropped = 50;
+        MoneyDropped = 150;
         XPDropped = 4500;
         EnemyMoraleBoost enemyMoraleBoost = new EnemyMoraleBoost();
         skillSet.Add(enemyMoraleBoost);

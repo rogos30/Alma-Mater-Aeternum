@@ -7,7 +7,8 @@ using static UnityEngine.Rendering.VolumeComponent;
 
 public abstract class Character
 {
-    protected const float statBoostMultiplier = 1.25f;
+    protected const float atkAccStatBoostMultiplier = 1.25f;
+    protected const float defStatBoostMultiplier = 2f;
     protected const float poisonAndRegenMultiplier = 0.1f;
     public int criticalDamageMultiplier = 2;
     public enum StatusEffects
@@ -100,13 +101,13 @@ public abstract class Character
             switch (effect)
             {
                 case 0: //attack buff
-                    Attack = (int)(DefaultAttack * statBoostMultiplier);
+                    Attack = (int)(DefaultAttack * atkAccStatBoostMultiplier);
                     break;
                 case 1: //defense buff
-                    Defense = (int)(DefaultDefense * statBoostMultiplier);
+                    Defense = (int)(DefaultDefense * defStatBoostMultiplier);
                     break;
                 case 2: //accuracy buff
-                    Accuracy = DefaultAccuracy * statBoostMultiplier;
+                    Accuracy = DefaultAccuracy * atkAccStatBoostMultiplier;
                     break;
                 case 4: //more turns
                     Turns = DefaultTurns + 1;
@@ -132,13 +133,13 @@ public abstract class Character
             switch (effect)
             {
                 case 0: //attack debuff
-                    Attack = (int)(DefaultAttack / statBoostMultiplier);
+                    Attack = (int)(DefaultAttack / atkAccStatBoostMultiplier);
                     break;
                 case 1: //defense debuff
-                    Defense = (int)(DefaultDefense / statBoostMultiplier);
+                    Defense = (int)(DefaultDefense / defStatBoostMultiplier);
                     break;
                 case 2: //accuracy debuff
-                    Accuracy = DefaultAccuracy / statBoostMultiplier;
+                    Accuracy = DefaultAccuracy / atkAccStatBoostMultiplier;
                     break;
                 case 4: //paralysis
                     Turns = 0;

@@ -623,7 +623,7 @@ public class StoryManager : MonoBehaviour
 
     public void ProgressStory(bool isPlayingGameNormally = true)
     {
-        Debug.Log("progressing story");
+        Debug.Log("progressing story from " + currentMainQuest + " to " + (currentMainQuest+1));
         currentQuestText.text = questDescriptions[++currentMainQuest];
         //FriendlyCharacter character;
         switch (currentMainQuest)
@@ -814,10 +814,13 @@ public class StoryManager : MonoBehaviour
             case 74:
                 //poczatek outside'u
                 player.transform.position = new Vector2(-414, 185);
-                cam.orthographicSize = 5f;
-                AdjustFollowerNPCsDistance(false);
                 GameManager.instance.currentFreeroamMusicStage = 6;
                 if (isPlayingGameNormally) GameManager.instance.PlayFreeroamMusic();
+                cam.orthographicSize = 5f;
+                break;
+            case 75:
+                //poczatek outside'u
+                AdjustFollowerNPCsDistance(false);
                 GameManager.instance.currentLocationText.text = "Za szko³¹";
                 player.PreventRandomEncounters();
                 break;
@@ -875,6 +878,7 @@ public class StoryManager : MonoBehaviour
                 player.currentRandomEncounterStage = 2;
                 GameManager.instance.currentFreeroamMusicStage = 7;
                 GameManager.instance.currentLocationText.text = "Podziemia szko³y";
+                GameManager.instance.currentLocationIndex = 21;
                 cam.orthographicSize = 3.5f;
                 player.moveSpeed = 3.5f;
                 foreach (var follower in followerNPCs)
@@ -910,11 +914,16 @@ public class StoryManager : MonoBehaviour
                 }
                 break;
             case 111:
-                player.currentRandomEncounterStage = 1;
                 player.transform.position = new Vector2(-300.5f, 45);
                 GameManager.instance.currentFreeroamMusicStage = 8;
                 if (isPlayingGameNormally) GameManager.instance.PlayFreeroamMusic();
                 GameManager.instance.currentLocationText.text = "Parter, blok D";
+                GameManager.instance.currentLocationIndex = 9;
+                break;
+            case 112:
+                player.currentRandomEncounterStage = 1;
+                GameManager.instance.currentLocationText.text = "Parter, blok D";
+                GameManager.instance.currentLocationIndex = 9;
                 break;
             case 121:
                 player.PreventRandomEncounters();
@@ -1251,11 +1260,14 @@ public class StoryManager : MonoBehaviour
             FinishSideQuest();
             ProgressStory();
 
-            Inventory.instance.wearables[19].Add(1); //gold medal
-            GameManager.instance.lastPageOfWearablesUnlocked = true;
-            List<string> gameInfoLines = new List<string>();
-            gameInfoLines.Add("Otrzymujesz Z³oty Medal Matiego (atrybut ofensywny)");
-            DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
+            if (readDialogue)
+            {
+                Inventory.instance.wearables[19].Add(1); //gold medal
+                GameManager.instance.lastPageOfWearablesUnlocked = true;
+                List<string> gameInfoLines = new List<string>();
+                gameInfoLines.Add("Otrzymujesz Z³oty Medal Matiego (atrybut ofensywny)");
+                DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
+            }
         }
         else
         {

@@ -18,7 +18,7 @@ public class Capoeira : PlayableSkill
         SkillSoundId = 2;
         MaxLevel = 2;
         levelsToUpgrades = new List<int> { 7, 9 };
-        tokensToUpgrades = new List<int> { 1, 1 };
+        tokensToUpgrades = new List<int> { 2, 2 };
         upgradeNames = new List<string> { "Odblokuj umiejêtnoœæ " + Name, "Wzmocnij trafienie krytyczne"};
         upgradeDescriptions = new List<string> { "Zwiêksza swój mno¿nik ataku", "Trafienie krytyczne zwiêksza mno¿nik o 2 ponad limit" };
     }

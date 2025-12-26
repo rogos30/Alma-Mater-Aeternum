@@ -19,8 +19,8 @@ public class StrokeOfLuck : PlayableSkill
         TargetIsRandom = false;
         SkillSoundId = 12;
         MaxLevel = 2;
-        levelsToUpgrades = new List<int> { 3, 6 };
-        tokensToUpgrades = new List<int> { 2, 1 };
+        levelsToUpgrades = new List<int> { 1, 6 };
+        tokensToUpgrades = new List<int> { 1, 2 };
         upgradeNames = new List<string> { "Odblokuj umiejêtnoœæ " + Name, "Zwiêksz minimalne leczenie" };
         upgradeDescriptions = new List<string> { "Przywraca kompanowi losow¹ czêœæ hp i wzmacnia losow¹ statystykê", "25% -> 35% maxHP" };
     }

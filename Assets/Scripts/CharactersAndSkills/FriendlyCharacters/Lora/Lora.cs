@@ -11,6 +11,7 @@ public class Lora : FriendlyCharacter
         NominativeName = "Lora";
         DativeName = "Lorze";
         AccusativeName = "Lory";
+
         Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 350;
         Skill = MaxSkill = 80;
         Attack = DefaultAttack = BaseAttack = 60;

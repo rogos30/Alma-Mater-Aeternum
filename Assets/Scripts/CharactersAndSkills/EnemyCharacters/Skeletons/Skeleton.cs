@@ -44,8 +44,8 @@ public class Skeleton : EnemyCharacter
         Accuracy = DefaultAccuracy = BaseAccuracy = 1f;
         Turns = DefaultTurns = BaseTurns = 1;
         Speed = 350;
-        MoneyDropped = 4000;
-        XPDropped = 500;
+        MoneyDropped = 150;
+        XPDropped = 4000;
         HeavyPunch heavyPunch = new HeavyPunch();
         skillSet.Add(heavyPunch);
         ToxicGas toxicGas = new ToxicGas();

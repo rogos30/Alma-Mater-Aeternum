@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
     int currentRow, maxCurrentRow, currentColumn, currentPage;
     int chosenMain, chosenInv, chosenChar, chosenCharOption, chosenEqCategory, chosenPage;
     int sfxVolume = 25, musicVolume = 25;
-    bool lockFPS = false;
+    bool lockFPS = false, showFPS = false;
     [NonSerialized] public int difficulty = 0;
     [NonSerialized] public int currentFreeroamMusicStage = 0;
     int[,] freeroamMusicIds = { { 0, 0, 0 }, { 1, 1, 1 }, { 0, 1, 1 }, { 2, 2, 2 }, { 0, 1, 2 }, { 3, 3, 3 }, { 4, 4, 4 }, { 5, 5, 5 }, { 1, 2, 2 } };
@@ -165,6 +165,10 @@ public class GameManager : MonoBehaviour
         {
             musicSource.Stop();
         }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            showFPS = !showFPS;
+        }
     }
 
     public void PlayFreeroamMusic()
@@ -191,9 +195,9 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            //if (showFPS == 1)
-            if (true)
-            { //always
+            if (showFPS)
+            //if (true)
+            {
                 gameFpsText.text = (float)frames / maxFramesTime + " fps";
                 BattleManager.instance.battleFpsText.text = (float)frames / maxFramesTime + " fps";
             }
@@ -720,6 +724,7 @@ public class GameManager : MonoBehaviour
                                 characterSkillTreeTexts[currentRow = 0].color = orange;
                                 skillTreeIconBorders[currentPage = 0].color = orange;
                                 maxCurrentRow = BattleManager.instance.playableCharacters[chosenChar].UpgradeLevel + 1;
+                                maxCurrentRow = Math.Min(maxCurrentRow, BattleManager.instance.playableCharacters[chosenChar].MaxUpgradeLevel);
                                 characterSkillTreeColumn.SetActive(true);
                                 PrintUpgrades();
                                 PrintUpgradeDescription();
@@ -888,10 +893,12 @@ public class GameManager : MonoBehaviour
                     if (currentPage == 0)
                     {
                         maxCurrentRow = BattleManager.instance.playableCharacters[chosenChar].UpgradeLevel + 1;
+                        maxCurrentRow = Math.Min(maxCurrentRow, BattleManager.instance.playableCharacters[chosenChar].MaxUpgradeLevel);
                     }
                     else
                     {
                         maxCurrentRow = BattleManager.instance.playableCharacters[chosenChar].skillSet[currentPage].Level + 1;
+                        maxCurrentRow = Math.Min(maxCurrentRow, BattleManager.instance.playableCharacters[chosenChar].skillSet[currentPage].MaxLevel);
                     }
                     characterSkillTreeTexts[currentRow].color = Color.white;
                     currentRow = 0;
@@ -951,10 +958,12 @@ public class GameManager : MonoBehaviour
                     if (currentPage == 0)
                     {
                         maxCurrentRow = BattleManager.instance.playableCharacters[chosenChar].UpgradeLevel + 1;
+                        maxCurrentRow = Math.Min(maxCurrentRow, BattleManager.instance.playableCharacters[chosenChar].MaxUpgradeLevel);
                     }
                     else
                     {
                         maxCurrentRow = BattleManager.instance.playableCharacters[chosenChar].skillSet[currentPage].Level + 1;
+                        maxCurrentRow = Math.Min(maxCurrentRow, BattleManager.instance.playableCharacters[chosenChar].skillSet[currentPage].MaxLevel);
                     }
                     characterSkillTreeTexts[currentRow].color = Color.white;
                     currentRow = 0;

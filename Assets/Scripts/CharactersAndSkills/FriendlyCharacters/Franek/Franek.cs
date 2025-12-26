@@ -5,7 +5,6 @@ using static UnityEngine.AudioSettings;
 
 public class Franek : FriendlyCharacter
 {
-    //specialty - tbd
 
     public Franek() : base()
     {
@@ -24,7 +23,6 @@ public class Franek : FriendlyCharacter
         Speed = 500;
         SpriteIndex = 5;
         AbilityDescription = "Franek zaczyna walkê z buffem do ataku, obrony i celnoœci na 3 tury";
-        CharacterDescription = "Opis Franka wip";
         Attack attack = new Attack();
         skillSet.Add(attack);
         PerfectGoalkeeper perfectGoalkeeper = new PerfectGoalkeeper();

@@ -49,8 +49,10 @@ public class StoryManager : MonoBehaviour
     public bool canReturnToMainStory = true;
 
     public GameObject[] SuperToastIngredients;
-    public bool finishedSuperToast;
+    public bool finishedSuperToast, finishedJaronald;
     public int superToastProgress;
+    public int currentAnimator = 0;
+    public float currentCamSize = 3.5f;
 
     [SerializeField] AudioClip[] additionalVoiceLines;
     void Awake()
@@ -67,6 +69,7 @@ public class StoryManager : MonoBehaviour
         ponyStickersCollected = 0;
         superToastProgress = 0;
         finishedSuperToast = false;
+        finishedJaronald = false;
     }
 
     void Update()
@@ -623,14 +626,15 @@ public class StoryManager : MonoBehaviour
 
     public void ProgressStory(bool isPlayingGameNormally = true)
     {
-        Debug.Log("progressing story");
+        Debug.Log("progressing story to quest " + (currentMainQuest+1));
         currentQuestText.text = questDescriptions[++currentMainQuest];
         //FriendlyCharacter character;
         switch (currentMainQuest)
         {
             case 2:
                 //zdjecie kurtki
-                player.ChangeAnimator(1);
+                if (isPlayingGameNormally) player.ChangeAnimator(1);
+                currentAnimator = 1;
                 break;
             case 4:
                 //pobity uczen
@@ -780,16 +784,17 @@ public class StoryManager : MonoBehaviour
                 }
                 else
                 {
-                    player.ChangeAnimator(2);
                     player.transform.position = new Vector2(-207, 52);
                 }
+                currentAnimator = 2;
                 BattleManager.instance.currentPartyCharacters.RemoveAll(x => x >= 0);
                 BattleManager.instance.currentPartyCharacters.Add(6); //Janek
                 BattleManager.instance.currentPartyCharacters.Add(5); //Lora
                 break;
             case 69:
                 //ucieczka przed caryca
-                player.ChangeAnimator(1);
+                if (isPlayingGameNormally) 
+                currentAnimator = 1;
                 BattleManager.instance.currentPartyCharacters.RemoveAll(x => x >= 0);
                 BattleManager.instance.currentPartyCharacters.Add(0); //Rogos
                 BattleManager.instance.currentPartyCharacters.Add(1); //Welenc
@@ -797,10 +802,12 @@ public class StoryManager : MonoBehaviour
                 BattleManager.instance.currentPartyCharacters.Add(3); //Kaja
                 AdjustFollowerNPCsDistance(true);
                 GameManager.instance.currentFreeroamMusicStage = 5;
-                cam.orthographicSize = 5f;
+                currentCamSize = 5f;
                 if (isPlayingGameNormally)
                 {
+                    player.ChangeAnimator(1);
                     GameManager.instance.PlayFreeroamMusic();
+                    cam.orthographicSize = 5f;
                 }
                 break;
             case 73:
@@ -814,10 +821,14 @@ public class StoryManager : MonoBehaviour
             case 74:
                 //poczatek outside'u
                 player.transform.position = new Vector2(-414, 185);
-                cam.orthographicSize = 5f;
+                currentCamSize = 5f;
                 AdjustFollowerNPCsDistance(false);
                 GameManager.instance.currentFreeroamMusicStage = 6;
-                if (isPlayingGameNormally) GameManager.instance.PlayFreeroamMusic();
+                if (isPlayingGameNormally)
+                {
+                    GameManager.instance.PlayFreeroamMusic();
+                    cam.orthographicSize = 5f;
+                }
                 GameManager.instance.currentLocationText.text = "Za szko³¹";
                 player.PreventRandomEncounters();
                 break;
@@ -875,7 +886,7 @@ public class StoryManager : MonoBehaviour
                 player.currentRandomEncounterStage = 2;
                 GameManager.instance.currentFreeroamMusicStage = 7;
                 GameManager.instance.currentLocationText.text = "Podziemia szko³y";
-                cam.orthographicSize = 3.5f;
+                currentCamSize = 3.5f;
                 player.moveSpeed = 3.5f;
                 foreach (var follower in followerNPCs)
                 {
@@ -887,6 +898,7 @@ public class StoryManager : MonoBehaviour
                     StartCoroutine(GameManager.instance.FadeToBlack(0.7f));
                     StartCoroutine(TransitionToUnderground());
                     GameManager.instance.PlayFreeroamMusic();
+                    cam.orthographicSize = 3.5f;
                 }
                 else
                 {
@@ -925,7 +937,8 @@ public class StoryManager : MonoBehaviour
                 BattleManager.instance.currentPartyCharacters.Remove(2);
                 AdjustFollowerNPCsDistance(true);
                 GameManager.instance.currentFreeroamMusicStage = 5;
-                cam.orthographicSize = 5f;
+                currentCamSize = 5f;
+                //cam.orthographicSize = 5f;
                 if (isPlayingGameNormally)
                 {
                     GameManager.instance.PlayFreeroamMusic();
@@ -936,7 +949,8 @@ public class StoryManager : MonoBehaviour
                 AdjustFollowerNPCsDistance(false);
                 break;
             case 131:
-                cam.orthographicSize = 3.5f;
+                currentCamSize = 3.5f;
+                if (isPlayingGameNormally) cam.orthographicSize = 3.5f;
                 break;
             case 137:
                 GameManager.instance.artifacts[8].GetComponent<ArtifactController>().wasSeen = true;
@@ -1048,6 +1062,8 @@ public class StoryManager : MonoBehaviour
             else
             {
                 player.ChangeAnimator(1);
+
+                currentAnimator = 1;
                 player.transform.position = new Vector2(-300, 32);
             }
             FinishSideQuest();
@@ -1071,13 +1087,17 @@ public class StoryManager : MonoBehaviour
                     else
                     {
                         player.ChangeAnimator(3);
+                        currentAnimator = 3;
                         player.transform.position = new Vector2(-309, -112);
                     }
                     player.PreventRandomEncounters();
-                    cam.orthographicSize = 5f;
+
+                    currentCamSize = 5f;
+                    //cam.orthographicSize = 5f;
                     break;
                 case 6:
-                    cam.orthographicSize = 3.5f;
+                    currentCamSize = 3.5f;
+                    //cam.orthographicSize = 3.5f;
                     break;
             }
             HandleSideQuestNPCs(1);
@@ -1136,6 +1156,7 @@ public class StoryManager : MonoBehaviour
                     else
                     {
                         player.ChangeAnimator(3);
+                        currentAnimator = 3;
                         player.transform.position = new Vector2(-174, 11.5f);
                     }
                     player.PreventRandomEncounters();
@@ -1149,6 +1170,7 @@ public class StoryManager : MonoBehaviour
                     else
                     {
                         player.ChangeAnimator(1);
+                        currentAnimator = 1;
                         player.transform.position = new Vector2(-300, 35);
                     }
                     HandleFollowerNPCs();
@@ -1249,7 +1271,9 @@ public class StoryManager : MonoBehaviour
         {
             currentFaceTheCheaterQuest++;
             FinishSideQuest();
-            ProgressStory();
+
+            if (!finishedJaronald) ProgressStory();
+            finishedJaronald = true;
 
             Inventory.instance.wearables[19].Add(1); //gold medal
             GameManager.instance.lastPageOfWearablesUnlocked = true;
@@ -1277,6 +1301,7 @@ public class StoryManager : MonoBehaviour
                     else
                     {
                         player.ChangeAnimator(4);
+                        currentAnimator = 4;
                         player.transform.position = new Vector2(-193, -80);
                     }
                     break;
@@ -1289,6 +1314,7 @@ public class StoryManager : MonoBehaviour
                     else
                     {
                         player.ChangeAnimator(1);
+                        currentAnimator = 1;
                         player.transform.position = new Vector2(-290, -117);
                     }
 
@@ -1298,10 +1324,17 @@ public class StoryManager : MonoBehaviour
         }
     }
 
+    public void SetCamSizeAndAnimator(float camSize, int animator)
+    {
+        player.ChangeAnimator(animator);
+        cam.orthographicSize = camSize;
+    }
+
     IEnumerator TransitionToLora()
     {
         yield return new WaitForSeconds(0.4f);
         player.ChangeAnimator(2);
+        currentAnimator = 2;
         player.transform.position = new Vector2(-207, 52);
     }
     IEnumerator TransitionToUnderground()
@@ -1313,12 +1346,14 @@ public class StoryManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
         player.ChangeAnimator(3);
+        currentAnimator = 3;
         player.transform.position = new Vector2(-309, -112);
     }
     IEnumerator FinishFollowingReferees()
     {
         yield return new WaitForSeconds(0.4f);
         player.ChangeAnimator(1);
+        currentAnimator = 1;
         player.transform.position = new Vector2(-300, 32);
     }
 
@@ -1326,6 +1361,7 @@ public class StoryManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
         player.ChangeAnimator(3);
+        currentAnimator = 3;
         player.transform.position = new Vector2(-174, 11.5f);
     }
 
@@ -1333,6 +1369,7 @@ public class StoryManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
         player.ChangeAnimator(1);
+        currentAnimator = 1;
         player.transform.position = new Vector2(-300, 35);
     }
 
@@ -1340,12 +1377,14 @@ public class StoryManager : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
         player.ChangeAnimator(4);
+        currentAnimator = 4;
         player.transform.position = new Vector2(-193, -80);
     }
     IEnumerator TransitionBackToRogosFaceTheCheater()
     {
         yield return new WaitForSeconds(0.4f);
         player.ChangeAnimator(1);
+        currentAnimator = 1;
         player.transform.position = new Vector2(-290, -117);
     }
 }

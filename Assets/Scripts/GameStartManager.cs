@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static Unity.VisualScripting.Member;
 using static UnityEngine.GraphicsBuffer;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 
 public class GameStartManager : MonoBehaviour
@@ -24,7 +25,7 @@ public class GameStartManager : MonoBehaviour
 
     readonly string[] difficultyNames = {"£atwy", "åredni", "Trudny", "Fatalny" };
     readonly string[] lockFpsNames = { "Tak", "Nie" };
-    int currentRow, minCurrentRow, maxCurrentRow, currentState, chosenSaveSlot;
+    int currentRow, minCurrentRow, maxCurrentRow, currentState, chosenSaveSlot, currentPage, maxCurrentPage;
     int sfxVolume = 25, musicVolume = 25;
     bool lockFPS = false;
     [NonSerialized] public int difficulty = 0;
@@ -52,8 +53,10 @@ public class GameStartManager : MonoBehaviour
     {
         currentState = 0;
         currentRow = 0;
+        currentPage = 0;
         mainTexts[0].color = orange;
         maxCurrentRow = 4;
+        maxCurrentPage = 1;
         mainCanvas.enabled = true;
         instance = this;
         musicSource = gameObject.AddComponent<AudioSource>();
@@ -196,6 +199,22 @@ public class GameStartManager : MonoBehaviour
                 UpdateSettings();
             }
         }
+        else if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (currentState == 1 || currentState == 3) //load game slots
+            {
+                currentPage = Math.Max(currentPage - 1, 0);
+            }
+            PrintSlots();
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (currentState == 1 || currentState == 3) //load game slots
+            {
+                currentPage = Math.Min(currentPage + 1, maxCurrentPage - 1);
+            }
+            PrintSlots();
+        }
         else if (Input.GetKeyDown(KeyCode.Return))
         {
             sfxSource.clip = navigationAcceptSound;
@@ -231,7 +250,7 @@ public class GameStartManager : MonoBehaviour
                     mainTexts[currentRow].color = orange;
                     break;
                 case 1: //new game slots
-                    chosenSaveSlot = currentRow;
+                    chosenSaveSlot = currentPage * 4 + currentRow + 1;
                     PrintYesNo();
                     currentState = 2;
                     break;
@@ -261,11 +280,11 @@ public class GameStartManager : MonoBehaviour
                     break;
                 case 3: //load game slots
                     string dataDirPath = Application.persistentDataPath;
-                    string dataFileName = currentRow.ToString();
+                    string dataFileName = (currentPage * 4 + currentRow + 1).ToString();
                     string fullPath = Path.Combine(dataDirPath, dataFileName);
                     if (File.Exists(fullPath))
                     {
-                        chosenSaveSlot = currentRow;
+                        chosenSaveSlot = currentPage * 4 + currentRow + 1;
                         PrintYesNo();
                         currentState = 4;
                     }
@@ -326,6 +345,7 @@ public class GameStartManager : MonoBehaviour
         mainTexts[1].text = "Potwierdü";
         mainTexts[2].text = "Cofnij";
         maxCurrentRow = 3;
+        maxCurrentPage = 1;
     }
     void PrintSettings()
     {
@@ -337,17 +357,19 @@ public class GameStartManager : MonoBehaviour
         mainTexts[3].text = "Ogranicz FPS";
         UpdateSettings();
         maxCurrentRow = 4;
+        maxCurrentPage = 1;
     }
 
     void PrintSlots()
     {
         minCurrentRow = 0;
-        ClearTexts();
-        mainTexts[0].text = "Slot 1";
-        mainTexts[1].text = "Slot 2";
-        mainTexts[2].text = "Slot 3";
-        mainTexts[3].text = "Slot 4";
         maxCurrentRow = 4;
+        ClearTexts();
+        for (int row = minCurrentRow; row < maxCurrentRow; row++)
+        {
+            mainTexts[row].text = "Slot " + (currentPage * 4 + row + 1);
+        }
+        maxCurrentPage = 25;
     }
 
     void PrintMainView()
@@ -359,6 +381,7 @@ public class GameStartManager : MonoBehaviour
         mainTexts[2].text = "Ustawienia";
         mainTexts[3].text = "Wyjdü z gry";
         maxCurrentRow = 4;
+        maxCurrentPage = 1;
     }
 
     void UpdateGuideText()
@@ -386,13 +409,13 @@ public class GameStartManager : MonoBehaviour
                 GetInfoFromFile();
                 break;
             case 2: //new game - are you sure?
-                guideText.text = "Czy na pewno rozpoczπÊ nowπ grÍ na miejscu zapisu " + (chosenSaveSlot + 1) + "?";
+                guideText.text = "Czy na pewno rozpoczπÊ nowπ grÍ na miejscu zapisu " + chosenSaveSlot + "?";
                 break;
             case 3: //load game slots
                 GetInfoFromFile();
                 break;
             case 4: //load game - are you sure?
-                guideText.text = "Czy na pewno wczytaÊ grÍ z zapisu " + (chosenSaveSlot + 1) + "?";
+                guideText.text = "Czy na pewno wczytaÊ grÍ z zapisu " + chosenSaveSlot + "?";
                 break;
 
             case 5: //settings
@@ -495,7 +518,7 @@ public class GameStartManager : MonoBehaviour
     void GetInfoFromFile()
     {
         string dataDirPath = Application.persistentDataPath;
-        string dataFileName = currentRow.ToString();
+        string dataFileName = (currentPage * 4 + currentRow + 1).ToString();
         string fullPath = Path.Combine(dataDirPath, dataFileName);
         if (!File.Exists(fullPath))
         {
@@ -510,7 +533,11 @@ public class GameStartManager : MonoBehaviour
             {
                 currentMainQuest = int.Parse(reader.ReadLine());
                 string date = reader.ReadLine();
-                guideText.text = "Data zapisu: " + date + ", postÍp: " + (100f * currentMainQuest / 140) + "%";
+                float gameTimeSecs = float.Parse(reader.ReadLine());
+                int gameTimeMins = (int)(gameTimeSecs / 60);
+                float gameTimeHours = (int)(gameTimeSecs / 3600);
+                gameTimeSecs %= 60;
+                guideText.text = "Data zapisu: " + date + ", postÍp: " + Math.Round((100f * currentMainQuest / 140),2) + "%,\nczas gry: " + gameTimeHours + " h " + gameTimeMins + " m " + (int)gameTimeSecs + " s";
             }
         }
         if (currentMainQuest > 141)

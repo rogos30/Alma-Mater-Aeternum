@@ -14,7 +14,7 @@ public class Franek : FriendlyCharacter
         AccusativeName = "Franka";
 
         Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 400;
-        Skill = MaxSkill = 80;
+        Skill = MaxSkill = 95;
         Attack = DefaultAttack = BaseAttack = 75;
         Defense = DefaultDefense = BaseDefense = 50;
         Accuracy = DefaultAccuracy = BaseAccuracy = 1.2f;

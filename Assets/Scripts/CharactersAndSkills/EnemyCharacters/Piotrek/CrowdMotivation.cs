@@ -21,7 +21,7 @@ public class CrowdMotivation : EnemySkill
             return source.NominativeName + " nie ws³uchuje siê w t³um";
         }
         string finalDesc = source.NominativeName + InFightDescription + target.DativeName + ", odnawiaj¹c sobie ";
-        int healing = (int)(source.MaxHealth / 10 * Random.Range(0.8f, 1.2f));
+        int healing = (int)(source.MaxHealth / 20 * Random.Range(0.8f, 1.2f));
         int turns = 3;
         if (Random.Range(0, 1f) < criticalChance)
         {
@@ -30,10 +30,9 @@ public class CrowdMotivation : EnemySkill
             healing *= source.criticalDamageMultiplier;
         }
         target.ApplyBuff((int)Character.StatusEffects.ATTACK, turns);
-        target.ApplyBuff((int)Character.StatusEffects.DEFENSE, turns);
         healing = Mathf.Max(healing, 1);
         target.Heal(healing);
-        finalDesc = finalDesc + healing + " zdrowia i wzmacniaj¹c swój atak i obronê na " + (turns - 1) + " tury!";
+        finalDesc = finalDesc + healing + " zdrowia i wzmacniaj¹c swój atak na " + (turns - 1) + " tury!";
         return finalDesc;
     }
 }

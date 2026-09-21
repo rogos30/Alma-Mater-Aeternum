@@ -15,7 +15,10 @@ public class LockpickController : Interactable
     const float defaultSkillCheckTime = 1.75f;
     bool skillCheckGoingRight, skillCheckAcceptsInput;
     float skillCheckTime = defaultSkillCheckTime, defaultGreenAreaScale;
+    [SerializeField] int attemptsToUnlock = 1;
+    int currentAttempt = 0;
     [SerializeField] AudioClip doorUnlockSound;
+    [SerializeField] AudioClip lockpickProgressSound;
 
     [SerializeField] AudioMixer mixer;
     AudioSource sfxSource;
@@ -32,6 +35,7 @@ public class LockpickController : Interactable
     [SerializeField] int[] failureSpeakersIndexes;
 
     GameObject lockpick;
+    GameObject[] locks;
 
     private void Start()
     {
@@ -50,6 +54,21 @@ public class LockpickController : Interactable
 
         lockpick = GameManager.instance.movingLockpick;
         lockpick.transform.eulerAngles = new Vector3(0, 0, currentAngle);
+        locks = GameManager.instance.locks;
+        foreach(GameObject l in locks)
+        {
+            l.GetComponent<Image>().sprite = GameManager.instance.lockedLock;
+            l.SetActive(false);
+        }
+        attemptsToUnlock = Mathf.Min(3, attemptsToUnlock);
+        for (int i = 0; i < attemptsToUnlock; i++)
+        {
+            locks[i].SetActive(true);
+        }
+        for (int i = 0; i < currentAttempt; i++)
+        {
+            locks[i].GetComponent<Image>().sprite = GameManager.instance.unlockedLock;
+        }
         GameManager.instance.lockpickCanvas.enabled = true;
         GameManager.instance.inGameCanvas.enabled = false;
         GameManager.instance.skillCheckSlider.gameObject.SetActive(false);
@@ -69,7 +88,7 @@ public class LockpickController : Interactable
         {
             HandleInput();
             int performance = Mathf.Max(10 - (int)Mathf.Abs(optimalAngle - currentAngle), 0);
-            lockpick.transform.eulerAngles = new Vector3(0, 0, currentAngle + performance * Mathf.PerlinNoise(5 * performance * Time.time, 1) / 2);
+            lockpick.transform.eulerAngles = new Vector3(0, 0, currentAngle + performance * Mathf.PerlinNoise(3 * performance * Time.time, 1) / 2);
         }
     }
 
@@ -80,7 +99,7 @@ public class LockpickController : Interactable
             isLockpicking = false;
             int performance = Mathf.Max(10 - (int)Mathf.Abs(optimalAngle - currentAngle), 0);
             HandleSkillCheck(performance);
-            onSkillCheckFinished.AddListener(() => StartCoroutine(FinalizeAndExit()));
+            onSkillCheckFinished.AddListener(HandlePostSkillCheckLogic);
         }
         else if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -107,7 +126,7 @@ public class LockpickController : Interactable
         Vector2 newPos = greenArea.transform.localPosition;
         Vector3 newScale = greenArea.transform.localScale;
         newPos.x = greenPosition;
-        newScale.x = defaultGreenAreaScale * performance / 5;
+        newScale.x = defaultGreenAreaScale * performance / 7;
         greenArea.transform.localPosition = newPos;
         greenArea.transform.localScale = newScale;
         GameManager.instance.skillCheckSlider.value = 0;
@@ -150,7 +169,7 @@ public class LockpickController : Interactable
         slider.gameObject.SetActive(false);
         skillCheckAcceptsInput = false;
         float value = -skillCheckSliderWidth / 2 + skillCheckSliderWidth * slider.value / slider.maxValue;
-        //Debug.Log("value: " + value);
+        Debug.Log("value: " + value);
         Debug.Log("green: " + (greenPos - skillCheckSliderWidth * GameManager.instance.skillCheckGreenArea.transform.localScale.x / 2) + " - " + (greenPos + skillCheckSliderWidth * GameManager.instance.skillCheckGreenArea.transform.localScale.x / 2));
         if (value >= greenPos - skillCheckSliderWidth * GameManager.instance.skillCheckGreenArea.transform.localScale.x / 2
             && value <= greenPos + skillCheckSliderWidth * GameManager.instance.skillCheckGreenArea.transform.localScale.x / 2)
@@ -164,9 +183,38 @@ public class LockpickController : Interactable
         onSkillCheckFinished.Invoke();
     }
 
-    IEnumerator FinalizeAndExit()
+    void HandlePostSkillCheckLogic()
     {
         onSkillCheckFinished.RemoveAllListeners();
+        Debug.Log(isSuccessful + " " + currentAttempt);
+        if (isSuccessful)
+        {
+            currentAttempt++;
+            sfxSource.clip = lockpickProgressSound;
+            sfxSource.loop = false;
+            sfxSource.Play();
+            for (int i = 0; i < currentAttempt; i++)
+            {
+                locks[i].GetComponent<Image>().sprite = GameManager.instance.unlockedLock;
+            }
+            if (currentAttempt >= attemptsToUnlock)
+            {
+                StartCoroutine(FinalizeAndExit());
+            }
+            else
+            {
+                Interact();
+            }
+        }
+        else
+        {
+            StartCoroutine(FinalizeAndExit());
+        }
+    }
+
+    IEnumerator FinalizeAndExit()
+    {
+        currentAttempt = 0;
         if (isSuccessful)
         {
             sfxSource.clip = doorUnlockSound;

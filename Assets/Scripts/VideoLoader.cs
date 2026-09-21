@@ -7,8 +7,8 @@ public class VideoLoader : MonoBehaviour
 {
     [Header("Ustawienia")]
     [Tooltip("Wpisz tutaj nazwê pliku z rozszerzeniem, np. cutscenka1.mp4")]
-    public string nazwaPliku;
-    public string nazwaSceny;
+    public string fileName;
+    public string sceneName;
     float skipTime = 3;
     float currentSkipTime = 0;
 
@@ -24,14 +24,14 @@ public class VideoLoader : MonoBehaviour
         }
 
         // 2. Sprawdzamy czy wpisa³eœ nazwê pliku
-        if (string.IsNullOrEmpty(nazwaPliku))
+        if (string.IsNullOrEmpty(fileName))
         {
             Debug.LogError("B³¹d: Nie wpisa³eœ nazwy pliku wideo w Inspectorze!");
             return;
         }
 
         // 3. Budowanie œcie¿ki do StreamingAssets
-        string sciezka = Path.Combine(Application.streamingAssetsPath, nazwaPliku);
+        string sciezka = Path.Combine(Application.streamingAssetsPath, fileName);
 
         // 4. Ustawienie i odpalenie
         videoPlayer.source = VideoSource.Url;
@@ -53,7 +53,7 @@ public class VideoLoader : MonoBehaviour
     }
     void EndOfVideo(VideoPlayer vp)
     {
-        SceneManager.LoadScene(nazwaSceny);
+        SceneManager.LoadScene(sceneName);
     }
 
     private void Update()
@@ -69,7 +69,7 @@ public class VideoLoader : MonoBehaviour
         }
         if (currentSkipTime >= skipTime)
         {
-            SceneManager.LoadScene(nazwaSceny);
+            SceneManager.LoadScene(sceneName);
         }
     }
 }

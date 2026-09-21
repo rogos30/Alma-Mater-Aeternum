@@ -25,6 +25,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] Image blackImage;
     public PlayerController player;
     public GameObject movingLockpick;
+    public GameObject[] locks;
+    public Sprite lockedLock;
+    public Sprite unlockedLock;
     public Slider skillCheckSlider;
     public GameObject skillCheckGreenArea;
     public Image[] passwordClues;
@@ -54,6 +57,7 @@ public class GameManager : MonoBehaviour
     readonly string[] lockFpsNames = { "Tak", "Nie" };
     [NonSerialized] public bool canPause = true;
     [NonSerialized] public bool canSaveGame = true;
+    [NonSerialized] public float gameTime = 0f;
     int currentRow, maxCurrentRow, currentColumn, currentPage;
     int chosenMain, chosenInv, chosenChar, chosenCharOption, chosenEqCategory, chosenPage;
     int sfxVolume = 25, musicVolume = 25;
@@ -150,6 +154,7 @@ public class GameManager : MonoBehaviour
         {
             if (pauseCanvas.enabled)
             {
+                gameTime -= Time.deltaTime;
                 HandlePauseInput();
             }
             else
@@ -165,6 +170,7 @@ public class GameManager : MonoBehaviour
         {
             musicSource.Stop();
         }
+        gameTime += Time.deltaTime;
     }
 
     public void PlayFreeroamMusic()
@@ -1239,10 +1245,16 @@ public class GameManager : MonoBehaviour
             {
                 writer.WriteLine(StoryManager.instance.currentMainQuest);
                 writer.WriteLine(DateTime.Today.Day + "/" + DateTime.Today.Month + "/" + DateTime.Today.Year);
+                writer.WriteLine(gameTime);
+                writer.WriteLine(StoryManager.instance.currentAnimator);
+                writer.WriteLine(StoryManager.instance.currentCamSize);
+                writer.WriteLine(currentLocationText.text);
+                writer.WriteLine(currentLocationIndex);
                 writer.WriteLine(StoryManager.instance.currentPingPongScamsQuest);
                 writer.WriteLine(StoryManager.instance.currentFollowingRefereesQuest);
                 writer.WriteLine(StoryManager.instance.currentDiversionAndSearchQuest);
                 writer.WriteLine(StoryManager.instance.currentStrongStuffQuest);
+                writer.WriteLine(StoryManager.instance.finishedJaronald);
                 writer.WriteLine(StoryManager.instance.currentFaceTheCheaterQuest);
                 writer.WriteLine(Inventory.instance.money);
                 writer.WriteLine(ShopManager.instance.player.transform.position.x);
@@ -1290,8 +1302,6 @@ public class GameManager : MonoBehaviour
                     writer.WriteLine(ingredient.GetComponent<ArtifactController>().wasSeen);
                 }
                 writer.WriteLine(StoryManager.instance.finishedSuperToast);
-                writer.WriteLine(currentLocationText.text);
-                writer.WriteLine(currentLocationIndex);
                 writer.WriteLine(lastPageOfWearablesUnlocked);
                 writer.WriteLine("end");
                 writer.Close();
@@ -1315,6 +1325,11 @@ public class GameManager : MonoBehaviour
                 }
 
                 string date = reader.ReadLine();
+                gameTime = float.Parse(reader.ReadLine());
+                StoryManager.instance.currentAnimator = int.Parse(reader.ReadLine());
+                StoryManager.instance.currentCamSize = float.Parse(reader.ReadLine());
+                currentLocationText.text = reader.ReadLine();
+                currentLocationIndex = int.Parse(reader.ReadLine());
 
                 int currentPingPongScamsQuest = int.Parse(reader.ReadLine());
                 StoryManager.instance.currentPingPongScamsQuest = 0;
@@ -1360,6 +1375,8 @@ public class GameManager : MonoBehaviour
                     StoryManager.instance.canReturnToMainStory = false;
                 }
 
+                StoryManager.instance.finishedJaronald = bool.Parse(reader.ReadLine());
+
                 int currentFaceTheCheaterQuest = int.Parse(reader.ReadLine());
                 StoryManager.instance.currentFaceTheCheaterQuest = 0;
                 for (int i = 0; i < currentFaceTheCheaterQuest; i++)
@@ -1373,6 +1390,7 @@ public class GameManager : MonoBehaviour
                 float playerX = float.Parse(reader.ReadLine());
                 float playerY = float.Parse(reader.ReadLine());
                 ShopManager.instance.player.transform.position = new Vector2(playerX, playerY);
+                Debug.Log("Player position loaded: " + playerX + ", " + playerY);
                 if (StoryManager.instance.currentMainQuest == 73 || StoryManager.instance.currentMainQuest == 110)
                 {
                     //just saw kidnapping cutscene, progress story once more
@@ -1445,9 +1463,8 @@ public class GameManager : MonoBehaviour
                     ingredient.GetComponent<ArtifactController>().wasSeen = bool.Parse(reader.ReadLine());
                 }
                 StoryManager.instance.finishedSuperToast = bool.Parse(reader.ReadLine());
-                currentLocationText.text = reader.ReadLine();
-                currentLocationIndex = int.Parse(reader.ReadLine());
                 lastPageOfWearablesUnlocked = bool.Parse(reader.ReadLine());
+                StoryManager.instance.SetCamSizeAndAnimator(StoryManager.instance.currentCamSize, StoryManager.instance.currentAnimator);
                 reader.ReadLine();
                 reader.Close();
             }

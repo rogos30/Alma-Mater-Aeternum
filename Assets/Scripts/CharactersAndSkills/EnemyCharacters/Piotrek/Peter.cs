@@ -9,11 +9,11 @@ public class Peter : EnemyCharacter
         NominativeName = "Piotrek";
         DativeName = "Piotrkowi";
         AccusativeName = "Piotrka";
-        Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 3000;
-        DifficultyHealthChange = 3000;
+        Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 4000;
+        DifficultyHealthChange = 2000;
         Attack = DefaultAttack = BaseAttack = 200;
         DifficultyAttackChange = 70;
-        Defense = DefaultDefense = BaseDefense = 75;
+        Defense = DefaultDefense = BaseDefense = 70;
         Accuracy = DefaultAccuracy = BaseAccuracy = 0.90f;
         Turns = DefaultTurns = BaseTurns = 1;
         Speed = 150;

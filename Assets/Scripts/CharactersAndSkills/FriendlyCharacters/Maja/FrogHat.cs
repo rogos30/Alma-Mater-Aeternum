@@ -7,11 +7,11 @@ public class FrogHat : PlayableSkill
     public FrogHat() : base()
     {
         Name = "¯abia czapka";
-        SkillDescription = "zak³ada swoj¹ ¿abi¹ czapkê, nak³adaj¹c na siebie obronê i regeneracjê.";
-        InFightDescription = " zak³ada swoj¹ ¿abê-czapkê ";
+        SkillDescription = "zak³ada sojusznikowi ¿abi¹ czapkê, nak³adaj¹c na siebie obronê i regeneracjê.";
+        InFightDescription = " zak³ada ¿abê-czapkê ";
         Cost = 120;
-        TargetIsFriendly = false;
-        TargetIsSelf = true;
+        TargetIsFriendly = true;
+        TargetIsSelf = false;
         MultipleTargets = false;
         TargetIsRandom = false;
         SkillSoundId = 25;
@@ -19,14 +19,14 @@ public class FrogHat : PlayableSkill
         levelsToUpgrades = new List<int> { 2, 4 };
         tokensToUpgrades = new List<int> { 1, 1 };
         upgradeNames = new List<string> { "Odblokuj umiejêtnoœæ " + Name, "Zmniejsz koszt umiejêtnoœci"};
-        upgradeDescriptions = new List<string> { "Zwiêksza sobie obronê i nadaje regeneracjê", "120 -> 90 SP" };
+        upgradeDescriptions = new List<string> { "Zwiêksza sojusznikowi obronê i nadaje regeneracjê", "120 -> 90 SP" };
     }
 
     public override string execute(FriendlyCharacter source, Character target, int skillPerformance)
     {
         if (skillPerformance == 0)
         {
-            return source.NominativeName + " nie trafia ¿ab¹ na swoj¹ g³owê...";
+            return source.NominativeName + " nie trafia ¿ab¹ na g³owê " + target.AccusativeName + "...";
         }
         string finalDesc = source.NominativeName + InFightDescription;
         int turns = 3;
@@ -35,7 +35,7 @@ public class FrogHat : PlayableSkill
             finalDesc = "KRYTYCZNE TRAFIENIE! " + finalDesc;
             turns = 5;
         }
-        finalDesc = finalDesc + " i nak³ada na siebie obronê i regeneracjê na " + (turns-1) + " tury!";
+        finalDesc = finalDesc + target.DativeName + " i nak³ada obronê i regeneracjê na " + (turns-1) + " tury!";
         target.ApplyBuff((int)Character.StatusEffects.DEFENSE, turns);
         target.ApplyBuff((int)Character.StatusEffects.HEALTH, turns);
         return finalDesc;

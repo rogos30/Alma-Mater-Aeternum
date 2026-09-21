@@ -33,7 +33,7 @@ public class ShopManager : MonoBehaviour
     Color orange = new Color(0.976f, 0.612f, 0.007f);
     int currentColumn, currentRow, amountToBuy, maxAmountToBuy, currentPage;
     public int level;
-    readonly int[] upgradeCosts = { 100, 250, 500 };
+    readonly int[] upgradeCosts = { 50, 100, 250 };
     const string defaultControlsText = "W/S - nawigacja, A/D - iloœæ, Z/X - kategoria, Q/E - strona\r\nENTER - zakup, ESC - wyjœcie",
                 controlsTextAddOn = ", LSHIFT - ulepszenie";
     const int maxLevel = 3;

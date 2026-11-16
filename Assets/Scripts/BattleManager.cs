@@ -1244,7 +1244,7 @@ public class BattleManager : MonoBehaviour
         playableCharacters.Add(character);
         currentPartyCharacters.Add(0);
 
-        character = new Welenc();
+        character = new Swietlik();
         playableCharacters.Add(character);
 
         character = new Stasiak();
@@ -1258,8 +1258,10 @@ public class BattleManager : MonoBehaviour
 
         character = new Lora();
         playableCharacters.Add(character);
+
         character = new Franek();
         playableCharacters.Add(character);
+
         while (playableCharacters[5].UpgradeLevel < 4)
         {
             playableCharacters[5].Upgrade();
@@ -1273,6 +1275,9 @@ public class BattleManager : MonoBehaviour
         {
             playableCharacters[7].Upgrade();
         }
+
+        character = new Welenc();
+        playableCharacters.Add(character);
     }
 
     void InitializeEnemyCharacters()

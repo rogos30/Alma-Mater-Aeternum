@@ -10,12 +10,16 @@ public class BetrayableChangeOfRules : PlayableSkill
         Name = "Zmiana zasad";
         SkillDescription = "uznaje, ¿e przegrywa, wiêc usuwa turê przeciwnika.";
         InFightDescription = " parali¿uje ";
-        Cost = 0.4f;
+        Cost = 0.5f;
         TargetIsFriendly = false;
         TargetIsSelf = false;
         MultipleTargets = false;
         TargetIsRandom = false;
-        IsUnlocked = true;
+        MaxLevel = 2;
+        levelsToUpgrades = new List<int> { 9, 12 };
+        tokensToUpgrades = new List<int> { 2, 2 };
+        upgradeNames = new List<string> { "Odblokuj umiejêtnoœæ " + Name, "Zmniejsz koszt" };
+        upgradeDescriptions = new List<string> { "Usuwa turê przeciwnika", "50% -> 40% maxSP" };
     }
 
     public override string execute(FriendlyCharacter source, Character target, int skillPerformance)
@@ -28,20 +32,20 @@ public class BetrayableChangeOfRules : PlayableSkill
         if (((Swietlik)source).Betrayal > Random.Range(0, 100))
         {   //choose a new target from your companions
             int knockedOuts = 0, newTargetId;
-            foreach (var companion in BattleManager.instance.playableCharacters)
+            foreach (var companionId in BattleManager.instance.currentPartyCharacters)
             {
-                if (companion.KnockedOut)
+                if (BattleManager.instance.playableCharacters[companionId].KnockedOut)
                 {
                     knockedOuts++;
                 }
             }
-            if (knockedOuts + 1 < BattleManager.instance.playableCharacters.Count)
+            if (knockedOuts + 1 < BattleManager.instance.currentPartyCharacters.Count)
             { //there is someone else alive besides Swietlik
                 do
                 {
-                    newTargetId = Random.Range(0, BattleManager.instance.playableCharacters.Count);
-                } while (BattleManager.instance.playableCharacters[newTargetId] == source || BattleManager.instance.playableCharacters[newTargetId].KnockedOut);
-                target = BattleManager.instance.playableCharacters[newTargetId];
+                    newTargetId = Random.Range(0, BattleManager.instance.currentPartyCharacters.Count);
+                } while (BattleManager.instance.playableCharacters[BattleManager.instance.currentPartyCharacters[newTargetId]] == source || BattleManager.instance.playableCharacters[BattleManager.instance.currentPartyCharacters[newTargetId]].KnockedOut);
+                target = BattleManager.instance.playableCharacters[BattleManager.instance.currentPartyCharacters[newTargetId]];
                 finalDesc = "NAST¥PI£A ZDRADA! ";
             }
         }
@@ -57,6 +61,13 @@ public class BetrayableChangeOfRules : PlayableSkill
     }
     public override void upgrade()
     {
-        return;
+        if (Level == 0)
+        {
+            IsUnlocked = true;
+        }
+        if (Level == 1)
+        {
+            Cost = 0.4f;
+        }
     }
 }

@@ -11,6 +11,7 @@ public class TeleportController : Interactable
     [SerializeField] int newLocationIndex;
     [SerializeField] AudioClip newMusic;
     [SerializeField] bool changeToFreeroamMusic;
+    [SerializeField] bool hideMinimap;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -57,5 +58,14 @@ public class TeleportController : Interactable
         if (newLocationName != "") GameManager.instance.currentLocationText.text = newLocationName;
         GameManager.instance.currentLocationIndex = newLocationIndex;
         player.position = destination.position;
+        if (hideMinimap)
+        {
+            MinimapController.instance.HideMinimap();
+        }
+        else if (!MinimapController.instance.minimapDisabled)
+        {
+            MinimapController.instance.ShowMinimap();
+            MinimapController.instance.AnchorCamera();
+        }
     }
 }

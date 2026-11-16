@@ -184,6 +184,7 @@
     <Compile Include="Assets\Scripts\CharactersAndSkills\EnemyCharacters\Piotrek\CrowdMotivation.cs" />
     <Compile Include="Assets\Scripts\CharactersAndSkills\EnemyCharacters\RandomEncounters\Underground\Spider.cs" />
     <Compile Include="Assets\Scripts\CharactersAndSkills\EnemyCharacters\Aniela\StrongAniela.cs" />
+    <Compile Include="Assets\Scripts\GreedyNPCController.cs" />
     <Compile Include="Assets\Scripts\CharactersAndSkills\EnemyCharacters\Jaronald\EnemyCheats.cs" />
     <Compile Include="Assets\Scripts\CharactersAndSkills\EnemyCharacters\Piotrek\CrowdIntimidation.cs" />
     <Compile Include="Assets\Scripts\CharactersAndSkills\EnemyCharacters\Franek\EnenyPerfectGoalkeeper.cs" />
@@ -282,6 +283,7 @@
     <Compile Include="Assets\Scripts\CharactersAndSkills\FriendlyCharacters\Franek\PerfectGoalkeeper.cs" />
     <Compile Include="Assets\Scripts\CharactersAndSkills\FriendlyCharacters\Bombel\BombelCutball.cs" />
     <Compile Include="Assets\Scripts\CharactersAndSkills\EnemyCharacters\Franek\DribbleThrow.cs" />
+    <Compile Include="Assets\Scripts\MinimapController.cs" />
     <Compile Include="Assets\Scripts\CharactersAndSkills\EnemyCharacters\Generators\Shock.cs" />
     <Compile Include="Assets\Scripts\CharactersAndSkills\EnemyCharacters\Tracksuiters\BaseballStrike.cs" />
     <Compile Include="Assets\Scripts\CharactersAndSkills\EnemyCharacters\Aniela\Toxicity.cs" />

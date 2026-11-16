@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
     readonly string[] difficultyNames = {"£atwy", "Œredni", "Trudny", "Fatalny" };
     readonly string[] lockFpsNames = { "Tak", "Nie" };
     [NonSerialized] public bool canPause = true;
-    [NonSerialized] public bool canSaveGame = true;
+    public bool canSaveGame = true;
     [NonSerialized] public float gameTime = 0f;
     int currentRow, maxCurrentRow, currentColumn, currentPage;
     int chosenMain, chosenInv, chosenChar, chosenCharOption, chosenEqCategory, chosenPage;
@@ -72,6 +72,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] TMP_Text[] optionsTexts;
     [SerializeField] TMP_Text[] optionValuesTexts;
     [SerializeField] TMP_Text[] inventoryMainTexts;
+    [SerializeField] TMP_Text inventoryMoneyText;
     [SerializeField] TMP_Text[] inventoryBrowseTexts;
     [SerializeField] TMP_Text inventoryBrowseTitle;
     [SerializeField] TMP_Text[] inventoryEqCategoryTexts;
@@ -128,6 +129,7 @@ public class GameManager : MonoBehaviour
         }
         HandleArtifacts();
         StoryManager.instance.HandleSuperToastIngredients();
+        MinimapController.instance.AnchorCamera();
     }
     private void Awake()
     {
@@ -221,6 +223,7 @@ public class GameManager : MonoBehaviour
         maxCurrentRow = mainColumnTexts.Length;
         Time.timeScale = 0;
         pauseCanvas.enabled = true;
+        inventoryMoneyText.text = "Kasa: " + Inventory.instance.money.ToString() + " PLN";
         if (canSaveGame)
         {
             SaveGame();
@@ -689,7 +692,7 @@ public class GameManager : MonoBehaviour
                             PrintCharStats(BattleManager.instance.currentPartyCharacters[currentPage]);
                             break;
                         case 1: //character eq category
-                            if (BattleManager.instance.playableCharacters[BattleManager.instance.currentPartyCharacters[chosenChar]].CanBeUpgraded)
+                            if (BattleManager.instance.playableCharacters[BattleManager.instance.currentPartyCharacters[currentPage]].CanBeUpgraded)
                             {
                                 currentColumn = (int)PauseState.CHARACTER_EQ_CATEGORY;
                                 chosenCharOption = currentRow;
@@ -716,7 +719,7 @@ public class GameManager : MonoBehaviour
                             }
                             break;
                         case 2: //character skill tree
-                            if (BattleManager.instance.playableCharacters[BattleManager.instance.currentPartyCharacters[chosenChar]].CanBeUpgraded)
+                            if (BattleManager.instance.playableCharacters[BattleManager.instance.currentPartyCharacters[currentPage]].CanBeUpgraded)
                             {
                                 currentColumn = (int)PauseState.CHARACTER_SKILL_TREE;
                                 chosenCharOption = currentRow;
@@ -985,8 +988,10 @@ public class GameManager : MonoBehaviour
         var currentChar = BattleManager.instance.playableCharacters[index];
         float accuracyModifier = currentChar.GetAccuracyFromWearables();
         float healingModifier = currentChar.GetHealingFromWearables();
+        bool isMaxLevel = currentChar.Level == 20;
+        string xpToNext = isMaxLevel ? "---" : (currentChar.XPToNextLevel - currentChar.CurrentXP).ToString();
         characterStatsTexts[0].text = "Poziom: " + currentChar.Level;
-        characterStatsTexts[1].text = "XP do nast.: " + (currentChar.XPToNextLevel - currentChar.CurrentXP);
+        characterStatsTexts[1].text = "XP do nast.: " + xpToNext;
         characterStatsTexts[2].text = "HP: " + currentChar.MaxHealth;
         characterStatsTexts[3].text = "SP: " + currentChar.MaxSkill;
         characterStatsTexts[4].text = "Atak: " + currentChar.DefaultAttack;
@@ -1207,6 +1212,7 @@ public class GameManager : MonoBehaviour
 
     public IEnumerator FadeToBlack(float blackoutTime)
     {
+        bool encountersAllowed = player.allowRandomEncounters;
         player.PreventRandomEncounters();
         fadeToBlackCanvas.enabled = true;
         float transitionTime = 0.2f;
@@ -1232,7 +1238,7 @@ public class GameManager : MonoBehaviour
         blackImage.color = new Color(0, 0, 0, 0);
 
         fadeToBlackCanvas.enabled = false;
-        player.AllowRandomEncounters();
+        if (encountersAllowed) player.AllowRandomEncounters();
     }
 
     public void SaveGame()

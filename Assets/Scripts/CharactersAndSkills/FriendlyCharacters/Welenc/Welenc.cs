@@ -14,6 +14,8 @@ public class Welenc : FriendlyCharacter
         DativeName = "Welencowi";
         AccusativeName = "Welenca";
 
+        CanBeUpgraded = false;
+
         Health = MaxHealth = DefaultMaxHealth = BaseMaxHealth = 450;
         Skill = MaxSkill = 110;
         Attack = DefaultAttack = BaseAttack = 80;
@@ -22,7 +24,7 @@ public class Welenc : FriendlyCharacter
 
         Turns = DefaultTurns = 1;
         Speed = 500;
-        SpriteIndex = 1;
+        SpriteIndex = 8;
         SetAbilityDescription();
         CharacterDescription = "Opis Welenca wip";
         MultipliableAttack attack = new MultipliableAttack();

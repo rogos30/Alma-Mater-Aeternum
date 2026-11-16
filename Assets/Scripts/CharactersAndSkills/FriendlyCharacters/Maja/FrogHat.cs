@@ -7,7 +7,7 @@ public class FrogHat : PlayableSkill
     public FrogHat() : base()
     {
         Name = "¯abia czapka";
-        SkillDescription = "zak³ada sojusznikowi ¿abi¹ czapkê, nak³adaj¹c na siebie obronê i regeneracjê.";
+        SkillDescription = "zak³ada sojusznikowi ¿abi¹ czapkê, nak³adaj¹c na niego obronê i regeneracjê.";
         InFightDescription = " zak³ada ¿abê-czapkê ";
         Cost = 120;
         TargetIsFriendly = true;

@@ -28,35 +28,31 @@ public class BetrayableAttack : PlayableSkill
         if (((Swietlik)source).Betrayal > Random.Range(0, 100))
         {   //choose a new target from your companions
             int knockedOuts = 0, newTargetId;
-            betrayed = true;
-            foreach (var companion in BattleManager.instance.playableCharacters)
+            foreach (var companionId in BattleManager.instance.currentPartyCharacters)
             {
-                if (companion.KnockedOut)
+                if (BattleManager.instance.playableCharacters[companionId].KnockedOut)
                 {
                     knockedOuts++;
                 }
             }
-            if (knockedOuts + 1 < BattleManager.instance.playableCharacters.Count)
+            if (knockedOuts + 1 < BattleManager.instance.currentPartyCharacters.Count)
             { //there is someone else alive besides Swietlik
                 do
                 {
-                    newTargetId = Random.Range(0, BattleManager.instance.playableCharacters.Count);
-                } while (BattleManager.instance.playableCharacters[newTargetId] == source || BattleManager.instance.playableCharacters[newTargetId].KnockedOut);
-                target = BattleManager.instance.playableCharacters[newTargetId];
+                    newTargetId = Random.Range(0, BattleManager.instance.currentPartyCharacters.Count);
+                } while (BattleManager.instance.playableCharacters[BattleManager.instance.currentPartyCharacters[newTargetId]] == source || BattleManager.instance.playableCharacters[BattleManager.instance.currentPartyCharacters[newTargetId]].KnockedOut);
+                target = BattleManager.instance.playableCharacters[BattleManager.instance.currentPartyCharacters[newTargetId]];
                 finalDesc = "NAST¥PI£A ZDRADA! ";
-            }
-            else
-            {
-                betrayed = false;
+                betrayed = true;
             }
         }
         finalDesc += source.NominativeName + InFightDescription + target.DativeName;
-        int damage = (int)(source.Attack * Random.Range(0.8f, 1.2f) * (100 + ((Swietlik)source).Betrayal) / 100) - target.Defense;
+        int damage = (int)(source.Attack * Random.Range(0.8f, 1.2f) * (100 + ((Swietlik)source).Betrayal) / 100f) - target.Defense;
         if (betrayed && ((FriendlyCharacter)target).IsGuarding)
         {
             damage = (int)(damage * FriendlyCharacter.guardDamageMultiplier);
         }
-        if (betrayed )
+        if (betrayed)
         {
             damage /= 2;
         }
@@ -69,7 +65,6 @@ public class BetrayableAttack : PlayableSkill
         finalDesc = finalDesc + " " + damage + " obra¿eñ!";
         target.TakeDamage(damage);
         ((Swietlik)source).ResetBetrayal();
-
         if (betrayed && ((FriendlyCharacter)target).IsGuarding && damage != 1)
         {
             damage /= 2;

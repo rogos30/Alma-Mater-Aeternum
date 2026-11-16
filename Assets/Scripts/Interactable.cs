@@ -11,6 +11,11 @@ public abstract class Interactable : MonoBehaviour
     public int appearanceAtQuest;
     public int disappearanceAtQuest;
 
+    protected virtual void OnEnable()
+    {
+        gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.y);
+    }
+
     protected virtual void Update()
     {
         if (canInteract())

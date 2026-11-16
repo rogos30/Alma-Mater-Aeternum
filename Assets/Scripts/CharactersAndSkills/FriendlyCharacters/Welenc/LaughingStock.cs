@@ -15,6 +15,7 @@ public class LaughingStock : PlayableSkill
         TargetIsSelf = false;
         MultipleTargets = true;
         TargetIsRandom = false;
+        IsUnlocked = true;
         AnimationId = 4;
         SkillSoundId = 19;
         MaxLevel = 2;

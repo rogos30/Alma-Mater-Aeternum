@@ -11,8 +11,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] RuntimeAnimatorController[] controllers;
     bool isFacingRight = false, isMoving = false, isMovingDiagonally = false;
     public int currentRandomEncounterStage = 0;
-    [SerializeField] bool allowRandomEncounters = false;
+    public bool allowRandomEncounters = false;
     [SerializeField] bool enableCheats = false;
+    [SerializeField] int minTimeToFight = 45, maxTimeToFight = 60;
     int[] randomEncounterBackgroundIndexes = { 5, 21, 5 };
 
     [SerializeField] GameObject interactionPrompt;
@@ -128,7 +129,7 @@ public class PlayerController : MonoBehaviour
     public void AllowRandomEncounters()
     {
         allowRandomEncounters = true;
-        ResetTimeToRandomEcounter();
+        //ResetTimeToRandomEcounter();
     }
 
     public void PreventRandomEncounters()
@@ -273,20 +274,17 @@ public class PlayerController : MonoBehaviour
 
     void ResetTimeToRandomEcounter()
     {
-        timeToFight = Random.Range(55, 70);
+        timeToFight = Random.Range(minTimeToFight, maxTimeToFight);
         //timeToFight = Random.Range(5, 10);
     }
 
     void InitiateRandomEncounter()
     {
-        int[] playables = new int[BattleManager.instance.currentPartyCharacters.Count];
         int[,] enemyConfigurations = { { 0, 0, 0, 1 }, { 0, 0, 1, 0 }, { 0, 0, 1, 1 }, { 0, 1, 0, 0 }, { 0, 1, 0, 1 }, { 0, 1, 1, 0 }, { 0, 1, 1, 1 },
-                                        { 1, 0, 0, 0 }, { 1, 0, 0, 1 }, { 1, 0, 1, 0 }, { 1, 0, 1, 1 }, { 1, 1, 0, 0 }, { 1, 1, 0, 1 }, { 1, 1, 1, 0 }, { 1, 1, 1, 1 } };
-        int enemySet = Random.Range(0, 15);
-        for (int i = 0; i < playables.Length; i++)
-        {
-            playables[i] = i;
-        }
+                                        { 1, 0, 0, 0 }, { 1, 0, 0, 1 }, { 1, 0, 1, 0 }, { 1, 0, 1, 1 }, { 1, 1, 0, 0 }, { 1, 1, 0, 1 }, { 1, 1, 1, 0 }, { 1, 1, 1, 1 },
+                                        { 1, 1, 1, 1 }, { 1, 1, 1, 1 }, { 1, 1, 1, 1 }, { 1, 1, 1, 1 }};
+        int enemySet = Random.Range(0, enemyConfigurations.GetLength(0));
+ 
         bool[] enemiesFirstDraw = new bool[4];
         int amountOfEnemies = 0;
         for (int i = 0; i < 4; i++)
@@ -307,6 +305,6 @@ public class PlayerController : MonoBehaviour
             }
         }
         if (GameManager.instance.currentLocationIndex == -1) return;
-        BattleManager.instance.InitiateBattle(playables, enemies, GameManager.instance.currentLocationIndex, true, true);
+        BattleManager.instance.InitiateBattle(BattleManager.instance.currentPartyCharacters.ToArray(), enemies, GameManager.instance.currentLocationIndex, true, true);
     }
 }

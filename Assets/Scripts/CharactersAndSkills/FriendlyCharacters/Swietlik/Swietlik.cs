@@ -15,9 +15,9 @@ public class Swietlik : FriendlyCharacter
         AccusativeName = "Œwietlika";
         Health = MaxHealth = DefaultMaxHealth = 500;
         Skill = MaxSkill = 80;
-        Attack = DefaultAttack = 100;
-        Defense = DefaultDefense = 35;
-        Accuracy = DefaultAccuracy = 0.9f;
+        Attack = DefaultAttack = BaseAttack = 100;
+        Defense = DefaultDefense = BaseDefense = 35;
+        Accuracy = DefaultAccuracy =BaseAccuracy = 0.9f;
         Turns = DefaultTurns = 1;
         Speed = 500;
         SpriteIndex = 1;

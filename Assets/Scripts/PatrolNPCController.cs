@@ -71,7 +71,7 @@ public class PatrolNPCController : Interactable
     }
 
     // Update is called once per frame
-    void Update()
+    new void Update()
     {
         currentTimeBetweenAwarenessUpdates += Time.deltaTime;
         if (canMove)

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ElectionPromise : PlayableSkill
 {
-    //skill = new Skill("Obietnica wyborcza", "spe³nia swoj¹ obietnicê wyborcz¹", "nie robi nic", 0, 1, 0, 1, 0, false, true, false, false, statusEffects);
-
+    bool hitAllies = true;
+    bool buffAllies = false;
     public ElectionPromise()
     {
         Name = "Obietnica wyborcza";
@@ -16,7 +16,11 @@ public class ElectionPromise : PlayableSkill
         TargetIsSelf = false;
         MultipleTargets = true;
         TargetIsRandom = false;
-        IsUnlocked = true;
+        MaxLevel = 4;
+        levelsToUpgrades = new List<int> { 10, 12, 12, 14 };
+        tokensToUpgrades = new List<int> { 2, 1, 1, 1 };
+        upgradeNames = new List<string> { "Odblokuj umiejêtnoœæ " + Name, "Nie atakuj sojuszników", "Dodatkowo wzmocnij atak sojuszników", "Zmniejsz koszt umiejêtnoœci" };
+        upgradeDescriptions = new List<string> { "Obieca³, ¿e nie zrobi nic.", "Po ocuceniu nie atakuje sojuszników", "Nak³ada buff do ataku na ka¿dego sojusznika na 2 tury", "100% -> 80% maxSP" };
     }
 
     public override string execute(FriendlyCharacter source, Character target, int skillPerformance)
@@ -29,32 +33,71 @@ public class ElectionPromise : PlayableSkill
         string finalDesc = source.AccusativeName + " POJEBA£O! ";
         if (target.KnockedOut)
         {
-            finalDesc += "Cuci i ";
+            if (!hitAllies && !buffAllies)
+            {
+                finalDesc += "Cuci " + target.AccusativeName;
+            }
+            else
+            {
+                finalDesc += "Cuci i ";
+            }
             target.KnockedOut = false;
             target.Health = target.MaxHealth / 2;
         }
-        finalDesc += "wali bombê " + target.DativeName + " za ";
-        int damage = (int)(source.Attack * Random.Range(0.8f, 1.2f)) - target.Defense;
-        if (((FriendlyCharacter)target).IsGuarding)
+        if (hitAllies)
         {
-            damage = (int)(damage * FriendlyCharacter.guardDamageMultiplier);
+            finalDesc += "wali bombê " + target.DativeName + " za ";
+            int damage = (int)(source.Attack * Random.Range(0.8f, 1.2f)) - target.Defense;
+            if (((FriendlyCharacter)target).IsGuarding)
+            {
+                damage = (int)(damage * FriendlyCharacter.guardDamageMultiplier);
+            }
+            if (Random.Range(0, 1f) < criticalChance)
+            {
+                finalDesc = "KRYTYCZNE TRAFIENIE! " + finalDesc;
+                damage *= source.criticalDamageMultiplier;
+            }
+            damage = Mathf.Max(damage, 1);
+            target.TakeDamage(damage);
+            if (((FriendlyCharacter)target).IsGuarding && damage != 1)
+            {
+                damage /= 2;
+            }
+            finalDesc = finalDesc + " " + damage + " obra¿eñ!";
         }
-        if (Random.Range(0,1f) < criticalChance)
+        if (buffAllies)
         {
-            finalDesc = "KRYTYCZNE TRAFIENIE! " + finalDesc;
-            damage *= source.criticalDamageMultiplier;
+            finalDesc += "wzmacnia atak " + target.DativeName + " na ";
+            int turns = 3;
+            if (Random.Range(0, 1f) < criticalChance)
+            {
+                finalDesc = "KRYTYCZNE TRAFIENIE! " + finalDesc;
+                turns = 4;
+            }
+            target.ApplyBuff((int)Character.StatusEffects.ATTACK, turns);
+            finalDesc = finalDesc + (turns-1) + " tury!";
         }
-        damage = Mathf.Max(damage, 1);
-        target.TakeDamage(damage);
-        if (((FriendlyCharacter)target).IsGuarding && damage != 1)
-        {
-            damage /= 2;
-        }
-        finalDesc = finalDesc + " " + damage + " obra¿eñ!";
+        
         return finalDesc;
     }
     public override void upgrade()
     {
-        return;
+        if (Level == 0)
+        {
+            IsUnlocked = true;
+        }
+        if (Level == 1)
+        {
+            hitAllies = false;
+        }
+        if (Level == 2)
+        {
+            buffAllies = true;
+        }
+        if (Level == 3)
+        {
+            Cost = 0.8f;
+        }
+        Level++;
     }
 }

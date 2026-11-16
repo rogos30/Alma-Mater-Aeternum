@@ -656,7 +656,7 @@ public class StoryManager : MonoBehaviour
                 break;
             case 9:
                 //dodanie Welenca
-                BattleManager.instance.currentPartyCharacters.Add(1);
+                BattleManager.instance.currentPartyCharacters.Add(8);
                 GameManager.instance.currentFreeroamMusicStage = 1;
                 if (isPlayingGameNormally) GameManager.instance.PlayFreeroamMusic();
                 break;
@@ -665,6 +665,7 @@ public class StoryManager : MonoBehaviour
                 if (isPlayingGameNormally) GameManager.instance.PlayFreeroamMusic();
                 break;
             case 14:
+                // po pogadaniu z Mania
                 if (isPlayingGameNormally)
                 {
                     List<string> gameInfoLines = new List<string>();
@@ -672,10 +673,17 @@ public class StoryManager : MonoBehaviour
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
-            case 19:
+            case 17:
+                player.AllowRandomEncounters();
+                break;
+            case 18:
+                // usuniecie Welenca, dodanie Swietlika
+                BattleManager.instance.currentPartyCharacters.Remove(8);
+                BattleManager.instance.currentPartyCharacters.Add(1);
+                break;
+            case 20:
                 //dodanie Stasiaka;
                 BattleManager.instance.currentPartyCharacters.Add(2);
-                player.AllowRandomEncounters();
                 if (isPlayingGameNormally)
                 {
                     List<string> gameInfoLines = new List<string>();
@@ -683,11 +691,12 @@ public class StoryManager : MonoBehaviour
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
-            case 24:
+            case 25:
                 //dodanie Mai
                 BattleManager.instance.currentPartyCharacters.Add(3);
                 break;
-            case 25:
+            case 26:
+                // po wyjsciu z auli
                 if (isPlayingGameNormally)
                 {
                     List<string> gameInfoLines = new List<string>();
@@ -695,11 +704,11 @@ public class StoryManager : MonoBehaviour
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
-            case 27:
+            case 29:
                 //skradanka elektrotechnik
                 AdjustFollowerNPCsDistance(true);
                 break;
-            case 29:
+            case 31:
                 //koniec skradanki elektrotechnik
                 AdjustFollowerNPCsDistance(false);
                 GameManager.instance.artifacts[5].GetComponent<ArtifactController>().wasSeen = true;
@@ -710,10 +719,10 @@ public class StoryManager : MonoBehaviour
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
-            case 30:
+            case 32:
                 EnableMarlboros();
                 break;
-            case 31:
+            case 33:
                 DisableMarlboros();
                 GameManager.instance.artifacts[1].GetComponent<ArtifactController>().wasSeen = true;
                 if (isPlayingGameNormally)
@@ -723,15 +732,8 @@ public class StoryManager : MonoBehaviour
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
-            case 34:
-                //Maja zostaje pod lazienka
-                BattleManager.instance.currentPartyCharacters.Remove(3);
-                break;
-            case 36:
-                //Maja wraca do druzyny
-                BattleManager.instance.currentPartyCharacters.Add(3);
-                break;
-            case 40:
+            case 42:
+                // po wyjsciu z lazienki
                 if (isPlayingGameNormally && IsSideQuestCompleted(0))
                 {
                     List<string> gameInfoLines = new List<string>();
@@ -739,7 +741,7 @@ public class StoryManager : MonoBehaviour
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
-            case 43:
+            case 45:
                 //first lockpick
                 if (isPlayingGameNormally)
                 {
@@ -748,7 +750,7 @@ public class StoryManager : MonoBehaviour
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
-            case 50:
+            case 52:
                 //dodanie Burzyñskiego
                 player.currentRandomEncounterStage = 1;
                 BattleManager.instance.currentPartyCharacters.Add(4);
@@ -760,7 +762,7 @@ public class StoryManager : MonoBehaviour
                     }
                 }
                 break;
-            case 51:
+            case 53:
                 GameManager.instance.currentFreeroamMusicStage = 3;
                 if (isPlayingGameNormally) GameManager.instance.PlayFreeroamMusic();
                 if (isPlayingGameNormally && IsSideQuestCompleted(1))
@@ -770,11 +772,16 @@ public class StoryManager : MonoBehaviour
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
-            case 52:
+            case 54:
                 GameManager.instance.currentFreeroamMusicStage = 4;
                 if (isPlayingGameNormally) GameManager.instance.PlayFreeroamMusic();
                 break;
-            case 60:
+            case 63:
+                // wejscie na baletowa
+                BattleManager.instance.currentPartyCharacters.RemoveAll(x => x >= 0);
+                BattleManager.instance.currentPartyCharacters.Add(0); //Rogos
+                break;
+            case 65:
                 //przejœcie do Lory
                 player.PreventRandomEncounters();
                 if (isPlayingGameNormally)
@@ -791,9 +798,8 @@ public class StoryManager : MonoBehaviour
                 BattleManager.instance.currentPartyCharacters.Add(6); //Janek
                 BattleManager.instance.currentPartyCharacters.Add(5); //Lora
                 break;
-            case 69:
+            case 74:
                 //ucieczka przed caryca
-                if (isPlayingGameNormally) 
                 currentAnimator = 1;
                 BattleManager.instance.currentPartyCharacters.RemoveAll(x => x >= 0);
                 BattleManager.instance.currentPartyCharacters.Add(0); //Rogos
@@ -810,7 +816,7 @@ public class StoryManager : MonoBehaviour
                     cam.orthographicSize = 5f;
                 }
                 break;
-            case 73:
+            case 78:
                 //koniec ucieczki
                 if (isPlayingGameNormally)
                 {
@@ -818,7 +824,7 @@ public class StoryManager : MonoBehaviour
                     SceneManager.LoadScene("cutscenes");
                 }
                 break;
-            case 74:
+            case 79:
                 //poczatek outside'u
                 player.transform.position = new Vector2(-414, 185);
                 currentCamSize = 5f;
@@ -831,34 +837,6 @@ public class StoryManager : MonoBehaviour
                 }
                 GameManager.instance.currentLocationText.text = "Za szko³¹";
                 player.PreventRandomEncounters();
-                break;
-            case 81:
-                player.moveSpeed = 8;
-                foreach (var follower in followerNPCs)
-                {
-                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 9;
-                }
-                break;
-            case 82:
-                player.moveSpeed = 3.5f;
-                foreach (var follower in followerNPCs)
-                {
-                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 3.5f;
-                }
-                break;
-            case 83:
-                player.moveSpeed = 8;
-                foreach (var follower in followerNPCs)
-                {
-                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 9;
-                }
-                break;
-            case 84:
-                player.moveSpeed = 3.5f;
-                foreach (var follower in followerNPCs)
-                {
-                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 3.5f;
-                }
                 break;
             case 87:
                 player.moveSpeed = 8;
@@ -874,14 +852,42 @@ public class StoryManager : MonoBehaviour
                     follower.GetComponent<PlayerFollowerController>().moveSpeed = 3.5f;
                 }
                 break;
-            case 90:
+            case 89:
                 player.moveSpeed = 8;
                 foreach (var follower in followerNPCs)
                 {
                     follower.GetComponent<PlayerFollowerController>().moveSpeed = 9;
                 }
                 break;
-            case 91:
+            case 90:
+                player.moveSpeed = 3.5f;
+                foreach (var follower in followerNPCs)
+                {
+                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 3.5f;
+                }
+                break;
+            case 93:
+                player.moveSpeed = 8;
+                foreach (var follower in followerNPCs)
+                {
+                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 9;
+                }
+                break;
+            case 94:
+                player.moveSpeed = 3.5f;
+                foreach (var follower in followerNPCs)
+                {
+                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 3.5f;
+                }
+                break;
+            case 95:
+                player.moveSpeed = 8;
+                foreach (var follower in followerNPCs)
+                {
+                    follower.GetComponent<PlayerFollowerController>().moveSpeed = 9;
+                }
+                break;
+            case 96:
                 //wejscie do podziemi
                 player.currentRandomEncounterStage = 2;
                 GameManager.instance.currentFreeroamMusicStage = 7;
@@ -905,15 +911,15 @@ public class StoryManager : MonoBehaviour
                     player.transform.position = new Vector2(-258, 175);
                 }
                 break;
-            case 101:
+            case 106:
                 //poczatek patrolujacych szkieletow
                 AdjustFollowerNPCsDistance(true);
                 break;
-            case 108:
+            case 113:
                 //koniec patrolujacych szkieletow
                 AdjustFollowerNPCsDistance(false);
                 break;
-            case 110:
+            case 115:
                 //wyjscie z podziemi
                 if (isPlayingGameNormally)
                 {
@@ -921,17 +927,17 @@ public class StoryManager : MonoBehaviour
                     SceneManager.LoadScene("cutscenes");
                 }
                 break;
-            case 111:
+            case 116:
                 player.currentRandomEncounterStage = 1;
                 player.transform.position = new Vector2(-300.5f, 45);
                 GameManager.instance.currentFreeroamMusicStage = 8;
                 if (isPlayingGameNormally) GameManager.instance.PlayFreeroamMusic();
                 GameManager.instance.currentLocationText.text = "Parter, blok D";
                 break;
-            case 121:
+            case 127:
                 player.PreventRandomEncounters();
                 break;
-            case 124:
+            case 130:
                 //burzynski chase
                 BattleManager.instance.currentPartyCharacters.Remove(1);
                 BattleManager.instance.currentPartyCharacters.Remove(2);
@@ -944,15 +950,15 @@ public class StoryManager : MonoBehaviour
                     GameManager.instance.PlayFreeroamMusic();
                 }
                 break;
-            case 130:
+            case 136:
                 GameManager.instance.currentFreeroamMusicStage = 3;
                 AdjustFollowerNPCsDistance(false);
                 break;
-            case 131:
+            case 137:
                 currentCamSize = 3.5f;
                 if (isPlayingGameNormally) cam.orthographicSize = 3.5f;
                 break;
-            case 137:
+            case 143:
                 GameManager.instance.artifacts[8].GetComponent<ArtifactController>().wasSeen = true;
                 if (isPlayingGameNormally)
                 {
@@ -961,7 +967,7 @@ public class StoryManager : MonoBehaviour
                     DialogueManager.instance.StartGameInfo(gameInfoLines.ToArray());
                 }
                 break;
-            case 141:
+            case 147:
                 if (isPlayingGameNormally)
                 {
                     PlayerPrefs.SetInt("cutsceneId", 3);
@@ -1052,7 +1058,7 @@ public class StoryManager : MonoBehaviour
             {
                 StartCoroutine(GameManager.instance.FadeToBlack(0.7f));
                 StartCoroutine(FinishFollowingReferees());
-                if (currentMainQuest >= 51 && currentMainQuest < 57)
+                if (currentMainQuest >= 53 && currentMainQuest < 62)
                 {
                     List<string> gameInfoLines = new List<string>();
                     gameInfoLines.Add("Misja poboczna dostêpna! Udaj siê na 1. piêtro do bloku D, aby j¹ wykonaæ");
